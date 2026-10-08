@@ -1,2 +1,5 @@
 /.quarto/
 **/*.quarto_ipynb
+
+/data/raw/wid_all_data_2002_2024_europe/WID_data_*.csv
+/data/raw/wid_all_data_2002_2024_europe/WID_metadata_*.csv
