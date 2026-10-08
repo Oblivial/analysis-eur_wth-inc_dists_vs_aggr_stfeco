@@ -9,11 +9,14 @@ read_ess_country_years <- function() {
       !is.na(ess$country) & ess$country != "All",
   ]
   ess$year <- as.integer(ess$year)
-  for (column in c("mean", "median", "mode", "iqr")) {
+  for (column in c("mean", "median", "mode", "iqr", "n_effective")) {
     ess[[column]] <- suppressWarnings(as.numeric(ess[[column]]))
   }
   ess$reliable <- tolower(as.character(ess$reliable)) == "true"
-  ess[, c("country", "year", "mean", "median", "mode", "iqr", "reliable")]
+  ess[, c(
+    "country", "year", "mean", "median", "mode", "iqr", "n_effective",
+    "reliable"
+  )]
 }
 
 wid_file <- function(code, kind) {

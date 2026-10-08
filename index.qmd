@@ -13,12 +13,19 @@ for a country.
 #| include: false
 source("R/load_project.R")
 matching <- run_country_year_matching()
-data_coverage <- run_data_coverage(matching)
-wid_distribution_change <- run_wid_distribution_change(matching)
-ess_summary_change <- run_ess_summary_change()
+data_validity <- run_data_validity(matching)
+valid_matching <- filter_to_valid_comparable_data(matching, data_validity)
+data_coverage <- run_data_coverage(matching, valid_matching)
+wid_distribution_change <- run_wid_distribution_change(valid_matching)
+ess_summary_change <- run_ess_summary_change(valid_matching)
+ess_wid_association <- run_ess_wid_association(valid_matching)
 ```
 
+{{< include modules/data_validity/_data_validity.qmd >}}
+
 {{< include modules/data_coverage/_data_coverage.qmd >}}
+
+{{< include modules/ess_wid_association/_ess_wid_association.qmd >}}
 
 {{< include modules/wid_distribution_change/_wid_distribution_change.qmd >}}
 

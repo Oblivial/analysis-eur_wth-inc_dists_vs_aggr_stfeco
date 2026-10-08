@@ -1,0 +1,20 @@
+## Data Validity
+
+An observation is valid for comparison only when ESS flags the country-year as
+reliable, both WID distributions contain all ten equal-split adult decile shares
+and sum to one within 2.5 percentage points, and neither WID series marks the
+year as extrapolated. The WID metadata does not identify all interpolated years.
+Observations failing any rule are excluded from every section after
+comparability.
+
+```{r}
+#| label: data-validity-summary
+#| echo: false
+knitr::kable(
+	data_validity$summary,
+	col.names = c(
+		"Validity check", "Passing country-years", "Matched country-years"
+	),
+	row.names = FALSE
+)
+```

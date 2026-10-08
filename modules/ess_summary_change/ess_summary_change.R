@@ -1,5 +1,5 @@
-compute_ess_summary_changes <- function() {
-  ess <- read_ess_country_years()
+compute_ess_summary_changes <- function(matching) {
+  ess <- matching$ess
   changes <- list()
 
   for (country in sort(unique(ess$country))) {
@@ -146,8 +146,8 @@ plot_top_ess_changes <- function(changes, relative_file, n = 15L) {
   })
 }
 
-compute_ess_summary_change <- function() {
-  changes <- compute_ess_summary_changes()
+compute_ess_summary_change <- function(matching) {
+  changes <- compute_ess_summary_changes(matching)
   plot_files <- character()
   if (nrow(changes)) {
     plot_files <- c(
@@ -158,12 +158,12 @@ compute_ess_summary_change <- function() {
   list(changes = changes, plot_files = plot_files)
 }
 
-run_ess_summary_change <- function() {
+run_ess_summary_change <- function(matching) {
   cached_result(
     "ess_summary_change",
     input_files = ess_input_files(),
-    code_files = code_files_for("matching", "ess_change"),
-    compute = compute_ess_summary_change,
+    code_files = code_files_for("matching", "validity", "ess_change"),
+    compute = function() compute_ess_summary_change(matching),
     output_files = function(result) unname(result$plot_files)
   )
 }

@@ -226,7 +226,7 @@ run_wid_distribution_change <- function(matching) {
   cached_result(
     "wid_distribution_change",
     input_files = c(ess_input_files(), wid_input_files()),
-    code_files = code_files_for("matching", "wid_change"),
+    code_files = code_files_for("matching", "validity", "wid_change"),
     compute = function() compute_wid_distribution_change(matching),
     output_files = function(result) unname(result$plot_files)
   )

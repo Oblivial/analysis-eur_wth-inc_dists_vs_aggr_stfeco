@@ -8,7 +8,9 @@ paths <- list(
   cache_dir = ".cache",
   coverage_figures = "figures/descriptive/coverage",
   wid_change_figures = "figures/descriptive/distribution_change/wid",
-  ess_change_figures = "figures/descriptive/distribution_change/ess"
+  ess_change_figures = "figures/descriptive/distribution_change/ess",
+  association_figures = "figures/descriptive/ess_wid_association",
+  association_table = "data/processed/ess_wid_country_round.csv"
 )
 
 core_files <- c(
@@ -20,9 +22,11 @@ core_files <- c(
 
 module_files <- c(
   matching = "modules/country_year_matching/country_year_matching.R",
+  validity = "modules/data_validity/data_validity.R",
   coverage = "modules/data_coverage/data_coverage.R",
   wid_change = "modules/wid_distribution_change/wid_distribution_change.R",
-  ess_change = "modules/ess_summary_change/ess_summary_change.R"
+  ess_change = "modules/ess_summary_change/ess_summary_change.R",
+  association = "modules/ess_wid_association/ess_wid_association.R"
 )
 
 wid_analysis_years <- 2002:2024

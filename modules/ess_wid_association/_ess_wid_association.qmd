@@ -1,0 +1,80 @@
+## Descriptive ESS-WID Association
+
+The merged table uses the earliest matched observation in each two-year ESS
+round and the corresponding WID distribution. It retains ESS reliability,
+effective sample size, the selected post-tax income series where available,
+and WID extrapolation flags. The full country-round table is available as
+[data/processed/ess_wid_country_round.csv](data/processed/ess_wid_country_round.csv).
+
+All summaries and correlations below use ESS observations flagged reliable.
+Correlations are descriptive only; no significance tests are performed. The
+Gini values are approximated from WID's ten decile shares. Negative net wealth
+shares can produce wealth Gini values above one.
+
+### Variance Decomposition
+
+Between-country and within-country percentages describe where the reliable
+country-round variation in each measure occurs.
+
+```{r}
+#| label: association-variance-decomposition
+#| echo: false
+knitr::kable(ess_wid_association$variance, digits = 2, row.names = FALSE)
+```
+
+### Between-Country Association
+
+the mean ESS `stfeco` score with the corresponding decile-based WID Gini.
+Each point is a country's mean across reliable ESS rounds. The two panels compare
+the mean ESS `stfeco` score with the corresponding decile-based WID Gini. Only a
+few points farthest from the center are labeled to keep the scatter readable.
+
+```{r}
+#| label: association-between-country
+#| echo: false
+knitr::include_graphics(ess_wid_association$plot_files[["between"]])
+```
+
+### Within-Country Association
+
+Values are demeaned within each country, separating changes over time from
+persistent differences between countries.
+
+```{r}
+#| label: association-within-country
+#| echo: false
+knitr::include_graphics(ess_wid_association$plot_files[["within"]])
+```
+
+### ESS Year Pattern
+
+The line shows the reliable cross-country mean by year; the band spans the
+cross-country 25th to 75th percentiles. Larger points indicate more reliable
+country observations in that year.
+
+```{r}
+#| label: association-year-pattern
+#| echo: false
+knitr::include_graphics(ess_wid_association$plot_files[["year_patterns"]])
+```
+
+### Pearson Correlations
+
+Pairwise-complete descriptive correlations among ESS mean/IQR and WID Gini and
+selected group shares.
+
+```{r}
+#| label: association-pearson
+#| echo: false
+knitr::kable(ess_wid_association$pearson, digits = 2, row.names = FALSE)
+```
+
+### Spearman Correlations
+
+Rank-based descriptive correlations using the same reliable observations.
+
+```{r}
+#| label: association-spearman
+#| echo: false
+knitr::kable(ess_wid_association$spearman, digits = 2, row.names = FALSE)
+```

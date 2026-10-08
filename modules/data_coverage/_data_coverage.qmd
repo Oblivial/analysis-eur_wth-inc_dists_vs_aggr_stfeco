@@ -1,9 +1,10 @@
-## Data Availability
+## Data Comparability
 
 ### Common Countries by Year
 
-The bar height counts country-years flagged reliable in ESS with both WID series
-available. Labels show `reliable (matched / invalid)`, for example `15 (18/3)`.
+The bar height counts country-years that pass the validity rules above and match
+in ESS and both WID series. Labels show `valid (matched / excluded)`, for example
+`15 (18/3)`.
 
 ```{r}
 #| label: coverage-countries-per-year-plot
@@ -15,8 +16,8 @@ if (length(data_coverage$plot_files)) {
 
 ### Common Years by Country
 
-The bar length counts reliable ESS years with matched WID data for each country.
-Labels show `reliable (matched / invalid)` year counts.
+The bar length counts valid matched years for each country. Labels show
+`valid (matched / excluded)` year counts.
 
 ```{r}
 #| label: coverage-years-per-country-plot
