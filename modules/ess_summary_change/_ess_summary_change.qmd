@@ -7,21 +7,6 @@ grouped into two-year ESS rounds anchored at 2002, using the earliest available
 observation in each round. Heatmap columns label the selected endpoint pairs.
 Unreliable or unknown endpoints appear as blank cells.
 
-### Country and Year Change Heatmaps
-
-Darker cells indicate larger annualized changes in the ESS mean or IQR. Countries
-are sorted by median activity within each panel. Cells are blank if either
-endpoint is flagged unreliable or its reliability is unknown; IQR cells are
-also blank when an endpoint IQR is unavailable.
-
-```{r}
-#| label: ess-change-heatmaps
-#| echo: false
-if (length(ess_summary_change$plot_files)) {
-  knitr::include_graphics(ess_summary_change$plot_files[["heatmaps"]])
-}
-```
-
 ### Largest ESS Mean and IQR Changes
 
 The largest mean changes are ranked by annualized magnitude. The IQR panel shows

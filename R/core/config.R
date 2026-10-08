@@ -7,7 +7,6 @@ paths <- list(
   wid_dir = "data/raw/wid_all_data_2002_2024_europe",
   cache_dir = ".cache",
   coverage_figures = "figures/descriptive/coverage",
-  timeseries_figures = "figures/descriptive/timeseries",
   wid_change_figures = "figures/descriptive/distribution_change/wid",
   ess_change_figures = "figures/descriptive/distribution_change/ess"
 )
@@ -22,7 +21,6 @@ core_files <- c(
 module_files <- c(
   matching = "modules/country_year_matching/country_year_matching.R",
   coverage = "modules/data_coverage/data_coverage.R",
-  timeseries = "modules/country_timeseries/country_timeseries.R",
   wid_change = "modules/wid_distribution_change/wid_distribution_change.R",
   ess_change = "modules/ess_summary_change/ess_summary_change.R"
 )

@@ -131,36 +131,6 @@ summarise_wid_change_by_country <- function(changes) {
   values
 }
 
-plot_wid_change_heatmaps <- function(changes, relative_file) {
-  country_count <- length(unique(changes$country))
-  with_png(relative_file, 2100, max(2300, 72 * country_count), function() {
-    graphics::par(mfrow = c(2, 1), mar = c(8, 11, 4, 7), oma = c(4, 3, 2, 3))
-    for (concept in c("wealth", "income")) {
-      series_label <- unique(changes$series_label[changes$concept == concept])
-      if (!length(series_label)) {
-        series_label <- if (concept == "wealth") {
-          "Net personal wealth"
-        } else {
-          "National income"
-        }
-      }
-      draw_change_heatmap_panel(
-        changes[changes$concept == concept, , drop = FALSE],
-        "annualized_change_pp",
-        paste("WID", series_label[[1L]]),
-        mark_column = "extrapolated",
-        mark_pch = 4,
-        marker_note = "x marks a transition with an extrapolated endpoint."
-      )
-    }
-    graphics::mtext(
-      "Mean cumulative decile-share movement (percentage points per year)",
-      side = 3, outer = TRUE, line = 0.3
-    )
-    graphics::mtext("Country", side = 2, outer = TRUE, line = 0.7)
-  })
-}
-
 plot_wid_change_scatter <- function(summary, relative_file) {
   wealth <- summary[summary$concept == "wealth", c(
     "country", "median_annualized_change_pp"
@@ -243,11 +213,9 @@ compute_wid_distribution_change <- function(matching) {
 
   if (nrow(changes)) {
     plot_files <- c(
-      heatmaps = file.path(paths$wid_change_figures, "change_heatmaps.png"),
       scatter = file.path(paths$wid_change_figures, "country_comparison.png"),
       top_changes = file.path(paths$wid_change_figures, "largest_changes.png")
     )
-    plot_wid_change_heatmaps(changes, plot_files[["heatmaps"]])
     plot_wid_change_scatter(summary, plot_files[["scatter"]])
     plot_top_wid_changes(changes, plot_files[["top_changes"]])
   }

@@ -55,47 +55,6 @@ compute_ess_summary_changes <- function() {
   changes
 }
 
-plot_ess_change_heatmaps <- function(changes, relative_file) {
-  if (!nrow(changes)) return(FALSE)
-  mean_changes <- data.frame(
-    country = changes$country,
-    previous_year = changes$previous_year,
-    year = changes$year,
-    round_label = changes$round_label,
-    magnitude = ifelse(
-      changes$reliable_pair, changes$mean_change_per_year, NA_real_
-    )
-  )
-  iqr_changes <- data.frame(
-    country = changes$country,
-    previous_year = changes$previous_year,
-    year = changes$year,
-    round_label = changes$round_label,
-    magnitude = ifelse(
-      changes$reliable_pair, changes$iqr_change_per_year, NA_real_
-    )
-  )
-  country_count <- length(unique(changes$country))
-
-  with_png(relative_file, 2100, max(2300, 72 * country_count), function() {
-    graphics::par(mfrow = c(2, 1), mar = c(8, 11, 4, 7), oma = c(4, 3, 2, 3))
-    draw_change_heatmap_panel(
-      mean_changes, "magnitude", "ESS mean change",
-      marker_note = "Blank cells have an unreliable or unknown endpoint.",
-      scale_label = "ESS points/year"
-    )
-    draw_change_heatmap_panel(
-      iqr_changes, "magnitude", "ESS IQR change",
-      marker_note = "Blank cells have an unreliable or unknown endpoint.",
-      scale_label = "ESS points/year"
-    )
-    graphics::mtext(
-      "Annualized absolute changes (ESS scale points per year)",
-      side = 3, outer = TRUE, line = 0.3
-    )
-    graphics::mtext("Country", side = 2, outer = TRUE, line = 0.7)
-  })
-}
 
 plot_top_ess_changes <- function(changes, relative_file, n = 15L) {
   if (!nrow(changes)) return(FALSE)
@@ -192,10 +151,8 @@ compute_ess_summary_change <- function() {
   plot_files <- character()
   if (nrow(changes)) {
     plot_files <- c(
-      heatmaps = file.path(paths$ess_change_figures, "change_heatmaps.png"),
       top_changes = file.path(paths$ess_change_figures, "largest_changes.png")
     )
-    plot_ess_change_heatmaps(changes, plot_files[["heatmaps"]])
     plot_top_ess_changes(changes, plot_files[["top_changes"]])
   }
   list(changes = changes, plot_files = plot_files)

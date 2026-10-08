@@ -1,6 +1,8 @@
 project:
   type: default
   execute-dir: project
+  render:
+    - index.qmd
 
 format:
   html:

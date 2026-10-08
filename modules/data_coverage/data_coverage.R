@@ -1,45 +1,70 @@
-summarise_coverage_by_country <- function(country_years) {
+summarise_coverage_by_country <- function(country_years, ess) {
   if (!nrow(country_years)) {
     return(data.frame(
       country = character(), wid_code = character(), first_year = integer(),
-      last_year = integer(), matched_years = integer()
+      last_year = integer(), reliable_years = integer(),
+      matched_years = integer(), invalid_years = integer()
     ))
   }
+  matched <- merge(
+    country_years,
+    ess[, c("country", "year", "reliable")],
+    by = c("country", "year"),
+    all.x = TRUE,
+    sort = FALSE
+  )
+  matched$reliable <- !is.na(matched$reliable) & matched$reliable
   by_country <- do.call(rbind, lapply(
-    split(country_years, country_years$country),
+    split(matched, matched$country),
     function(rows) {
       data.frame(
         country = rows$country[[1L]],
         wid_code = rows$wid_code[[1L]],
         first_year = min(rows$year),
         last_year = max(rows$year),
+        reliable_years = sum(rows$reliable),
         matched_years = nrow(rows),
+        invalid_years = sum(!rows$reliable),
         stringsAsFactors = FALSE
       )
     }
   ))
   by_country <- by_country[
-    order(-by_country$matched_years, by_country$country), , drop = FALSE
+    order(-by_country$reliable_years, by_country$country), , drop = FALSE
   ]
   rownames(by_country) <- NULL
   by_country
 }
 
-summarise_coverage_by_year <- function(country_years) {
+summarise_coverage_by_year <- function(country_years, ess) {
   if (!nrow(country_years)) {
     return(data.frame(
-      year = integer(), country_count = integer(), common_countries = character()
+      year = integer(), country_count = integer(), matched_count = integer(),
+      invalid_count = integer(), common_countries = character()
     ))
   }
-  countries_by_year <- split(country_years$country, country_years$year)
+  matched <- merge(
+    country_years,
+    ess[, c("country", "year", "reliable")],
+    by = c("country", "year"),
+    all.x = TRUE,
+    sort = FALSE
+  )
+  matched$reliable <- !is.na(matched$reliable) & matched$reliable
+  rows_by_year <- split(matched, matched$year)
   by_year <- data.frame(
-    year = as.integer(names(countries_by_year)),
-    country_count = vapply(
-      countries_by_year, function(x) length(unique(x)), integer(1)
-    ),
+    year = as.integer(names(rows_by_year)),
+    country_count = vapply(rows_by_year, function(rows) {
+      sum(rows$reliable)
+    }, integer(1)),
+    matched_count = vapply(rows_by_year, nrow, integer(1)),
+    invalid_count = vapply(rows_by_year, function(rows) {
+      sum(!rows$reliable)
+    }, integer(1)),
     common_countries = vapply(
-      countries_by_year,
-      function(x) paste(sort(unique(x)), collapse = ", "),
+      rows_by_year,
+      function(rows) paste(sort(unique(rows$country[rows$reliable])),
+                           collapse = ", "),
       character(1)
     ),
     stringsAsFactors = FALSE
@@ -51,50 +76,70 @@ summarise_coverage_by_year <- function(country_years) {
 
 plot_countries_per_year <- function(by_year, relative_file) {
   counts <- by_year$country_count
-  with_png(relative_file, 1400, 800, function() {
-    graphics::par(mar = c(6, 5, 4, 2))
+  labels <- paste0(
+    by_year$country_count, " (", by_year$matched_count, "/",
+    by_year$invalid_count, ")"
+  )
+  with_png(relative_file, 2200, 1050, function() {
+    graphics::par(mar = c(6, 6, 5, 2))
     positions <- graphics::barplot(
       counts,
       names.arg = by_year$year,
       col = "#167D8D",
       border = NA,
       las = 2,
-      ylim = c(0, max(counts) * 1.15),
+      ylim = c(0, max(1, max(counts)) * 1.3),
       xlab = "Year",
-      ylab = "Countries with matched ESS and WID data",
-      main = "Common-country coverage by year"
+      ylab = "Countries with reliable ESS and matched WID data",
+      main = "Reliable common-country coverage by year"
     )
-    graphics::text(positions, counts, labels = counts, pos = 3, cex = 0.8)
+    graphics::text(
+      positions, counts, labels = labels, pos = 3, cex = 0.72, xpd = NA
+    )
+    graphics::mtext(
+      "Bar labels: reliable (matched / invalid)", side = 3, line = 0.2,
+      cex = 0.75
+    )
   })
 }
 
 plot_years_per_country <- function(by_country, relative_file) {
-  by_country <- by_country[order(by_country$matched_years), , drop = FALSE]
+  by_country <- by_country[order(by_country$reliable_years), , drop = FALSE]
+  counts <- by_country$reliable_years
+  labels <- paste0(
+    by_country$reliable_years, " (", by_country$matched_years, "/",
+    by_country$invalid_years, ")"
+  )
   height <- max(900, 36 * nrow(by_country))
   with_png(relative_file, 1500, height, function() {
-    graphics::par(mar = c(5, 10, 4, 3))
+    graphics::par(mar = c(5, 10, 5, 7))
     positions <- graphics::barplot(
-      by_country$matched_years,
+      counts,
       names.arg = by_country$country,
       horiz = TRUE,
       las = 1,
       col = "#D58B27",
       border = NA,
-      xlim = c(0, max(by_country$matched_years) * 1.15),
-      xlab = "Number of years with matched ESS and WID data",
-      main = "Common-year coverage by country",
+      xlim = c(0, max(1, max(counts)) * 1.35),
+      xlab = "Reliable years with matched ESS and WID data",
+      main = "Reliable common-year coverage by country",
       cex.names = 0.8
     )
     graphics::text(
-      by_country$matched_years, positions,
-      labels = by_country$matched_years, pos = 4, cex = 0.75
+      counts, positions, labels = labels, pos = 4, cex = 0.72, xpd = NA
+    )
+    graphics::mtext(
+      "Bar labels: reliable (matched / invalid)", side = 3, line = 0.2,
+      cex = 0.75
     )
   })
 }
 
 compute_data_coverage <- function(matching) {
-  by_country <- summarise_coverage_by_country(matching$country_years)
-  by_year <- summarise_coverage_by_year(matching$country_years)
+  by_country <- summarise_coverage_by_country(
+    matching$country_years, matching$ess
+  )
+  by_year <- summarise_coverage_by_year(matching$country_years, matching$ess)
 
   plot_files <- character()
   if (nrow(by_country)) {
