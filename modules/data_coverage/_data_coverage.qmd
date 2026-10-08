@@ -1,0 +1,28 @@
+## Data Availability
+
+### Common Countries by Year
+
+The bar height shows how many countries have ESS data and both WID series
+available in each year.
+
+```{r}
+#| label: coverage-countries-per-year-plot
+#| echo: false
+if (length(data_coverage$plot_files)) {
+  knitr::include_graphics(data_coverage$plot_files[["countries_per_year"]])
+}
+```
+
+### Common Years by Country
+
+The bar length shows the number of years with matched ESS and WID data for each
+country.
+
+```{r}
+#| label: coverage-years-per-country-plot
+#| echo: false
+if (length(data_coverage$plot_files)) {
+  knitr::include_graphics(data_coverage$plot_files[["years_per_country"]])
+}
+```
+

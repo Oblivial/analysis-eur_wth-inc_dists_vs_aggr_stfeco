@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.18">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>ESS and WID Descriptive Analysis</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="index_files/libs/clipboard/clipboard.min.js"></script>
+<script src="index_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="index_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="index_files/libs/quarto-html/popper.min.js"></script>
+<script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="index_files/libs/quarto-html/anchor.min.js"></script>
+<link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap-215b371544c282197b31c8aa00ce3677.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#data-availability" id="toc-data-availability" class="nav-link active" data-scroll-target="#data-availability">Data Availability</a>
+  <ul class="collapse">
+  <li><a href="#common-countries-by-year" id="toc-common-countries-by-year" class="nav-link" data-scroll-target="#common-countries-by-year">Common Countries by Year</a></li>
+  <li><a href="#common-years-by-country" id="toc-common-years-by-country" class="nav-link" data-scroll-target="#common-years-by-country">Common Years by Country</a></li>
+  </ul></li>
+  <li><a href="#wid-distribution-change" id="toc-wid-distribution-change" class="nav-link" data-scroll-target="#wid-distribution-change">WID Distribution Change</a>
+  <ul class="collapse">
+  <li><a href="#country-and-year-change-heatmaps" id="toc-country-and-year-change-heatmaps" class="nav-link" data-scroll-target="#country-and-year-change-heatmaps">Country and Year Change Heatmaps</a></li>
+  <li><a href="#wealth-and-income-change-by-country" id="toc-wealth-and-income-change-by-country" class="nav-link" data-scroll-target="#wealth-and-income-change-by-country">Wealth and Income Change by Country</a></li>
+  <li><a href="#largest-wid-country-year-changes" id="toc-largest-wid-country-year-changes" class="nav-link" data-scroll-target="#largest-wid-country-year-changes">Largest WID Country-Year Changes</a></li>
+  </ul></li>
+  <li><a href="#ess-summary-change" id="toc-ess-summary-change" class="nav-link" data-scroll-target="#ess-summary-change">ESS Summary Change</a>
+  <ul class="collapse">
+  <li><a href="#country-and-year-change-heatmaps-1" id="toc-country-and-year-change-heatmaps-1" class="nav-link" data-scroll-target="#country-and-year-change-heatmaps-1">Country and Year Change Heatmaps</a></li>
+  <li><a href="#largest-ess-mean-and-iqr-changes" id="toc-largest-ess-mean-and-iqr-changes" class="nav-link" data-scroll-target="#largest-ess-mean-and-iqr-changes">Largest ESS Mean and IQR Changes</a></li>
+  </ul></li>
+  <li><a href="#country-time-series" id="toc-country-time-series" class="nav-link" data-scroll-target="#country-time-series">Country Time Series</a>
+  <ul class="collapse">
+  <li><a href="#albania" id="toc-albania" class="nav-link" data-scroll-target="#albania">Albania</a></li>
+  <li><a href="#austria" id="toc-austria" class="nav-link" data-scroll-target="#austria">Austria</a></li>
+  <li><a href="#belgium" id="toc-belgium" class="nav-link" data-scroll-target="#belgium">Belgium</a></li>
+  <li><a href="#bulgaria" id="toc-bulgaria" class="nav-link" data-scroll-target="#bulgaria">Bulgaria</a></li>
+  <li><a href="#croatia" id="toc-croatia" class="nav-link" data-scroll-target="#croatia">Croatia</a></li>
+  <li><a href="#cyprus" id="toc-cyprus" class="nav-link" data-scroll-target="#cyprus">Cyprus</a></li>
+  <li><a href="#czechia" id="toc-czechia" class="nav-link" data-scroll-target="#czechia">Czechia</a></li>
+  <li><a href="#denmark" id="toc-denmark" class="nav-link" data-scroll-target="#denmark">Denmark</a></li>
+  <li><a href="#estonia" id="toc-estonia" class="nav-link" data-scroll-target="#estonia">Estonia</a></li>
+  <li><a href="#finland" id="toc-finland" class="nav-link" data-scroll-target="#finland">Finland</a></li>
+  <li><a href="#france" id="toc-france" class="nav-link" data-scroll-target="#france">France</a></li>
+  <li><a href="#germany" id="toc-germany" class="nav-link" data-scroll-target="#germany">Germany</a></li>
+  <li><a href="#greece" id="toc-greece" class="nav-link" data-scroll-target="#greece">Greece</a></li>
+  <li><a href="#hungary" id="toc-hungary" class="nav-link" data-scroll-target="#hungary">Hungary</a></li>
+  <li><a href="#iceland" id="toc-iceland" class="nav-link" data-scroll-target="#iceland">Iceland</a></li>
+  <li><a href="#ireland" id="toc-ireland" class="nav-link" data-scroll-target="#ireland">Ireland</a></li>
+  <li><a href="#israel" id="toc-israel" class="nav-link" data-scroll-target="#israel">Israel</a></li>
+  <li><a href="#italy" id="toc-italy" class="nav-link" data-scroll-target="#italy">Italy</a></li>
+  <li><a href="#kosovo" id="toc-kosovo" class="nav-link" data-scroll-target="#kosovo">Kosovo</a></li>
+  <li><a href="#latvia" id="toc-latvia" class="nav-link" data-scroll-target="#latvia">Latvia</a></li>
+  <li><a href="#lithuania" id="toc-lithuania" class="nav-link" data-scroll-target="#lithuania">Lithuania</a></li>
+  <li><a href="#luxembourg" id="toc-luxembourg" class="nav-link" data-scroll-target="#luxembourg">Luxembourg</a></li>
+  <li><a href="#montenegro" id="toc-montenegro" class="nav-link" data-scroll-target="#montenegro">Montenegro</a></li>
+  <li><a href="#netherlands" id="toc-netherlands" class="nav-link" data-scroll-target="#netherlands">Netherlands</a></li>
+  <li><a href="#norway" id="toc-norway" class="nav-link" data-scroll-target="#norway">Norway</a></li>
+  <li><a href="#poland" id="toc-poland" class="nav-link" data-scroll-target="#poland">Poland</a></li>
+  <li><a href="#portugal" id="toc-portugal" class="nav-link" data-scroll-target="#portugal">Portugal</a></li>
+  <li><a href="#romania" id="toc-romania" class="nav-link" data-scroll-target="#romania">Romania</a></li>
+  <li><a href="#serbia" id="toc-serbia" class="nav-link" data-scroll-target="#serbia">Serbia</a></li>
+  <li><a href="#slovakia" id="toc-slovakia" class="nav-link" data-scroll-target="#slovakia">Slovakia</a></li>
+  <li><a href="#slovenia" id="toc-slovenia" class="nav-link" data-scroll-target="#slovenia">Slovenia</a></li>
+  <li><a href="#spain" id="toc-spain" class="nav-link" data-scroll-target="#spain">Spain</a></li>
+  <li><a href="#sweden" id="toc-sweden" class="nav-link" data-scroll-target="#sweden">Sweden</a></li>
+  <li><a href="#switzerland" id="toc-switzerland" class="nav-link" data-scroll-target="#switzerland">Switzerland</a></li>
+  <li><a href="#turkey" id="toc-turkey" class="nav-link" data-scroll-target="#turkey">Turkey</a></li>
+  <li><a href="#ukraine" id="toc-ukraine" class="nav-link" data-scroll-target="#ukraine">Ukraine</a></li>
+  <li><a href="#united-kingdom" id="toc-united-kingdom" class="nav-link" data-scroll-target="#united-kingdom">United Kingdom</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">ESS and WID Descriptive Analysis</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This report compares country-year summaries of satisfaction with the state of the economy (ESS <code>stfeco</code>) with distributional series from the World Inequality Database (WID). Only years available in ESS and in both WID concepts are plotted for a country.</p>
+<section id="data-availability" class="level2">
+<h2 class="anchored" data-anchor-id="data-availability">Data Availability</h2>
+<section id="common-countries-by-year" class="level3">
+<h3 class="anchored" data-anchor-id="common-countries-by-year">Common Countries by Year</h3>
+<p>The bar height shows how many countries have ESS data and both WID series available in each year.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/coverage/common_countries_by_year.png" class="img-fluid figure-img" width="700"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="common-years-by-country" class="level3">
+<h3 class="anchored" data-anchor-id="common-years-by-country">Common Years by Country</h3>
+<p>The bar length shows the number of years with matched ESS and WID data for each country.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/coverage/common_years_by_country.png" class="img-fluid figure-img" width="750"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="wid-distribution-change" class="level2">
+<h2 class="anchored" data-anchor-id="wid-distribution-change">WID Distribution Change</h2>
+<p>This section summarizes annualized distribution changes for WID countries that also have ESS country-year data. Years are grouped into two-year ESS rounds anchored at 2002; the earliest matched observation in each round is used. Each heatmap column compares consecutive selected ESS observations, skipping intervening WID years. WID post-tax national-income shares are used where available, with pre-tax shares as a fallback. For each transition, the score is the mean absolute change across the nine cumulative decile-share cutoffs, divided by the gap between ESS observations. It is a magnitude in percentage points per year; it does not indicate whether inequality rose or fell. The metric uses the cumulative share profile directly, so it also applies when net wealth shares are negative.</p>
+<section id="country-and-year-change-heatmaps" class="level3">
+<h3 class="anchored" data-anchor-id="country-and-year-change-heatmaps">Country and Year Change Heatmaps</h3>
+<p>Darker cells indicate larger annualized distribution changes. Countries are sorted by median activity within each panel. An <code>x</code> marks a transition whose previous or current year is within a WID metadata-declared extrapolation interval. Interpolation is not separately flagged in the available series metadata.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/distribution_change/wid/change_heatmaps.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="wealth-and-income-change-by-country" class="level3">
+<h3 class="anchored" data-anchor-id="wealth-and-income-change-by-country">Wealth and Income Change by Country</h3>
+<p>Each point is a country, positioned by its median annualized change for wealth and income. Larger values mean more movement in the cumulative share profile; no direction is implied.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/distribution_change/wid/country_comparison.png" class="img-fluid figure-img" width="700"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="largest-wid-country-year-changes" class="level3">
+<h3 class="anchored" data-anchor-id="largest-wid-country-year-changes">Largest WID Country-Year Changes</h3>
+<p>The top transitions are ranked by annualized magnitude and use consecutive ESS observation years as endpoints. An asterisk indicates that one endpoint falls within a WID metadata-declared extrapolation interval.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/distribution_change/wid/largest_changes.png" class="img-fluid figure-img" width="900"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="ess-summary-change" class="level2">
+<h2 class="anchored" data-anchor-id="ess-summary-change">ESS Summary Change</h2>
+<p>ESS changes are calculated independently of WID. The mean measures movement in average satisfaction with the state of the economy; the IQR measures change in spread. Both are annualized absolute changes in ESS scale points. Years are grouped into two-year ESS rounds anchored at 2002, using the earliest available observation in each round. Heatmap columns label the selected endpoint pairs. Unreliable or unknown endpoints appear as blank cells.</p>
+<section id="country-and-year-change-heatmaps-1" class="level3">
+<h3 class="anchored" data-anchor-id="country-and-year-change-heatmaps-1">Country and Year Change Heatmaps</h3>
+<p>Darker cells indicate larger annualized changes in the ESS mean or IQR. Countries are sorted by median activity within each panel. Cells are blank if either endpoint is flagged unreliable or its reliability is unknown; IQR cells are also blank when an endpoint IQR is unavailable.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/distribution_change/ess/change_heatmaps.png" class="img-fluid figure-img" width="1050"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="largest-ess-mean-and-iqr-changes" class="level3">
+<h3 class="anchored" data-anchor-id="largest-ess-mean-and-iqr-changes">Largest ESS Mean and IQR Changes</h3>
+<p>The largest mean changes are ranked by annualized magnitude. The IQR panel shows the observed IQR at both ESS endpoints for the largest annualized IQR changes, making the before/after spread visible. Segment color indicates whether the IQR widened or narrowed; an asterisk marks an unreliable or unclassified endpoint.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="figures/descriptive/distribution_change/ess/largest_changes.png" class="img-fluid figure-img" width="950"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="country-time-series" class="level2">
+<h2 class="anchored" data-anchor-id="country-time-series">Country Time Series</h2>
+<p>The ESS figure shows the mean, median, and mode of satisfaction with the state of the economy. Open points mark country-years flagged as unreliable in the ESS summary file. The WID figures track the shares held by the bottom 50%, middle 40%, and top 10% for net personal wealth and national income. Post-tax national income is used where available, with pre-tax national income as a fallback. The group shares are summed from WID’s decile data, making the distribution easier to compare over time without mixing country currencies. Net wealth shares may be negative for groups with debt.</p>
+<section id="albania" class="level3">
+<h3 class="anchored" data-anchor-id="albania">Albania</h3>
+<section id="ess-mean-median-and-mode" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Albania/albania_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Albania ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Albania/albania_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Albania Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Albania/albania_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Albania WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="austria" class="level3">
+<h3 class="anchored" data-anchor-id="austria">Austria</h3>
+<section id="ess-mean-median-and-mode-1" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-1">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Austria/austria_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Austria ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-1" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-1">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Austria/austria_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Austria Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-1" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-1">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Austria/austria_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Austria WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="belgium" class="level3">
+<h3 class="anchored" data-anchor-id="belgium">Belgium</h3>
+<section id="ess-mean-median-and-mode-2" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-2">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Belgium/belgium_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Belgium ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-2" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-2">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Belgium/belgium_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Belgium Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-2" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-2">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Belgium/belgium_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Belgium WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="bulgaria" class="level3">
+<h3 class="anchored" data-anchor-id="bulgaria">Bulgaria</h3>
+<section id="ess-mean-median-and-mode-3" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-3">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Bulgaria/bulgaria_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Bulgaria ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-3" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-3">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Bulgaria/bulgaria_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Bulgaria Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-3" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-3">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Bulgaria/bulgaria_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Bulgaria WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="croatia" class="level3">
+<h3 class="anchored" data-anchor-id="croatia">Croatia</h3>
+<section id="ess-mean-median-and-mode-4" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-4">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Croatia/croatia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Croatia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-4" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-4">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Croatia/croatia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Croatia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-4" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-4">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Croatia/croatia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Croatia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="cyprus" class="level3">
+<h3 class="anchored" data-anchor-id="cyprus">Cyprus</h3>
+<section id="ess-mean-median-and-mode-5" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-5">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Cyprus/cyprus_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Cyprus ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-5" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-5">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Cyprus/cyprus_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Cyprus Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-5" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-5">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Cyprus/cyprus_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Cyprus WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="czechia" class="level3">
+<h3 class="anchored" data-anchor-id="czechia">Czechia</h3>
+<section id="ess-mean-median-and-mode-6" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-6">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Czechia/czechia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Czechia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-6" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-6">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Czechia/czechia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Czechia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-6" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-6">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Czechia/czechia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Czechia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="denmark" class="level3">
+<h3 class="anchored" data-anchor-id="denmark">Denmark</h3>
+<section id="ess-mean-median-and-mode-7" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-7">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Denmark/denmark_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Denmark ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-7" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-7">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Denmark/denmark_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Denmark Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-7" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-7">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Denmark/denmark_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Denmark WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="estonia" class="level3">
+<h3 class="anchored" data-anchor-id="estonia">Estonia</h3>
+<section id="ess-mean-median-and-mode-8" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-8">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Estonia/estonia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Estonia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-8" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-8">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Estonia/estonia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Estonia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-8" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-8">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Estonia/estonia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Estonia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="finland" class="level3">
+<h3 class="anchored" data-anchor-id="finland">Finland</h3>
+<section id="ess-mean-median-and-mode-9" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-9">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Finland/finland_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Finland ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-9" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-9">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Finland/finland_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Finland Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-9" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-9">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Finland/finland_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Finland WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="france" class="level3">
+<h3 class="anchored" data-anchor-id="france">France</h3>
+<section id="ess-mean-median-and-mode-10" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-10">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/France/france_ess.png" class="img-fluid figure-img"></p>
+<figcaption>France ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-10" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-10">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/France/france_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>France Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-10" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-10">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/France/france_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>France WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="germany" class="level3">
+<h3 class="anchored" data-anchor-id="germany">Germany</h3>
+<section id="ess-mean-median-and-mode-11" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-11">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Germany/germany_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Germany ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-11" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-11">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Germany/germany_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Germany Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-11" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-11">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Germany/germany_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Germany WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="greece" class="level3">
+<h3 class="anchored" data-anchor-id="greece">Greece</h3>
+<section id="ess-mean-median-and-mode-12" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-12">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Greece/greece_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Greece ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-12" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-12">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Greece/greece_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Greece Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-12" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-12">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Greece/greece_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Greece WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="hungary" class="level3">
+<h3 class="anchored" data-anchor-id="hungary">Hungary</h3>
+<section id="ess-mean-median-and-mode-13" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-13">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Hungary/hungary_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Hungary ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-13" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-13">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Hungary/hungary_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Hungary Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-13" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-13">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Hungary/hungary_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Hungary WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="iceland" class="level3">
+<h3 class="anchored" data-anchor-id="iceland">Iceland</h3>
+<section id="ess-mean-median-and-mode-14" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-14">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Iceland/iceland_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Iceland ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-14" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-14">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Iceland/iceland_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Iceland Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-14" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-14">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Iceland/iceland_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Iceland WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="ireland" class="level3">
+<h3 class="anchored" data-anchor-id="ireland">Ireland</h3>
+<section id="ess-mean-median-and-mode-15" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-15">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Ireland/ireland_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Ireland ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-15" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-15">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Ireland/ireland_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Ireland Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-15" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-15">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Ireland/ireland_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Ireland WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="israel" class="level3">
+<h3 class="anchored" data-anchor-id="israel">Israel</h3>
+<section id="ess-mean-median-and-mode-16" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-16">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Israel/israel_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Israel ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-16" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-16">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Israel/israel_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Israel Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-16" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-16">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Israel/israel_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Israel WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="italy" class="level3">
+<h3 class="anchored" data-anchor-id="italy">Italy</h3>
+<section id="ess-mean-median-and-mode-17" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-17">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Italy/italy_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Italy ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-17" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-17">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Italy/italy_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Italy Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-17" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-17">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Italy/italy_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Italy WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="kosovo" class="level3">
+<h3 class="anchored" data-anchor-id="kosovo">Kosovo</h3>
+<section id="ess-mean-median-and-mode-18" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-18">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Kosovo/kosovo_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Kosovo ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-18" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-18">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Kosovo/kosovo_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Kosovo Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-18" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-18">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Kosovo/kosovo_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Kosovo WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="latvia" class="level3">
+<h3 class="anchored" data-anchor-id="latvia">Latvia</h3>
+<section id="ess-mean-median-and-mode-19" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-19">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Latvia/latvia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Latvia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-19" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-19">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Latvia/latvia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Latvia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-19" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-19">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Latvia/latvia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Latvia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="lithuania" class="level3">
+<h3 class="anchored" data-anchor-id="lithuania">Lithuania</h3>
+<section id="ess-mean-median-and-mode-20" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-20">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Lithuania/lithuania_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Lithuania ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-20" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-20">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Lithuania/lithuania_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Lithuania Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-20" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-20">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Lithuania/lithuania_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Lithuania WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="luxembourg" class="level3">
+<h3 class="anchored" data-anchor-id="luxembourg">Luxembourg</h3>
+<section id="ess-mean-median-and-mode-21" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-21">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Luxembourg/luxembourg_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Luxembourg ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-21" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-21">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Luxembourg/luxembourg_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Luxembourg Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-21" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-21">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Luxembourg/luxembourg_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Luxembourg WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="montenegro" class="level3">
+<h3 class="anchored" data-anchor-id="montenegro">Montenegro</h3>
+<section id="ess-mean-median-and-mode-22" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-22">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Montenegro/montenegro_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Montenegro ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-22" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-22">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Montenegro/montenegro_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Montenegro Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-22" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-22">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Montenegro/montenegro_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Montenegro WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="netherlands" class="level3">
+<h3 class="anchored" data-anchor-id="netherlands">Netherlands</h3>
+<section id="ess-mean-median-and-mode-23" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-23">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Netherlands/netherlands_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Netherlands ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-23" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-23">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Netherlands/netherlands_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Netherlands Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-23" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-23">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Netherlands/netherlands_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Netherlands WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="norway" class="level3">
+<h3 class="anchored" data-anchor-id="norway">Norway</h3>
+<section id="ess-mean-median-and-mode-24" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-24">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Norway/norway_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Norway ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-24" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-24">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Norway/norway_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Norway Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-24" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-24">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Norway/norway_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Norway WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="poland" class="level3">
+<h3 class="anchored" data-anchor-id="poland">Poland</h3>
+<section id="ess-mean-median-and-mode-25" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-25">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Poland/poland_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Poland ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-25" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-25">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Poland/poland_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Poland Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-25" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-25">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Poland/poland_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Poland WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="portugal" class="level3">
+<h3 class="anchored" data-anchor-id="portugal">Portugal</h3>
+<section id="ess-mean-median-and-mode-26" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-26">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Portugal/portugal_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Portugal ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-26" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-26">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Portugal/portugal_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Portugal Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-26" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-26">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Portugal/portugal_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Portugal WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="romania" class="level3">
+<h3 class="anchored" data-anchor-id="romania">Romania</h3>
+<section id="ess-mean-median-and-mode-27" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-27">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Romania/romania_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Romania ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-27" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-27">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Romania/romania_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Romania Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-27" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-27">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Romania/romania_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Romania WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="serbia" class="level3">
+<h3 class="anchored" data-anchor-id="serbia">Serbia</h3>
+<section id="ess-mean-median-and-mode-28" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-28">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Serbia/serbia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Serbia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-28" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-28">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Serbia/serbia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Serbia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-28" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-28">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Serbia/serbia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Serbia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="slovakia" class="level3">
+<h3 class="anchored" data-anchor-id="slovakia">Slovakia</h3>
+<section id="ess-mean-median-and-mode-29" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-29">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Slovakia/slovakia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Slovakia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-29" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-29">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Slovakia/slovakia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Slovakia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-29" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-29">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Slovakia/slovakia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Slovakia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="slovenia" class="level3">
+<h3 class="anchored" data-anchor-id="slovenia">Slovenia</h3>
+<section id="ess-mean-median-and-mode-30" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-30">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Slovenia/slovenia_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Slovenia ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-30" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-30">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Slovenia/slovenia_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Slovenia Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-30" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-30">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Slovenia/slovenia_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Slovenia WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="spain" class="level3">
+<h3 class="anchored" data-anchor-id="spain">Spain</h3>
+<section id="ess-mean-median-and-mode-31" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-31">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Spain/spain_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Spain ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-31" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-31">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Spain/spain_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Spain Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-31" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-31">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Spain/spain_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Spain WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="sweden" class="level3">
+<h3 class="anchored" data-anchor-id="sweden">Sweden</h3>
+<section id="ess-mean-median-and-mode-32" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-32">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Sweden/sweden_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Sweden ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-32" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-32">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Sweden/sweden_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Sweden Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-32" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-32">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Sweden/sweden_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Sweden WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="switzerland" class="level3">
+<h3 class="anchored" data-anchor-id="switzerland">Switzerland</h3>
+<section id="ess-mean-median-and-mode-33" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-33">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Switzerland/switzerland_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Switzerland ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-33" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-33">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Switzerland/switzerland_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Switzerland Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-33" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-33">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Switzerland/switzerland_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Switzerland WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="turkey" class="level3">
+<h3 class="anchored" data-anchor-id="turkey">Turkey</h3>
+<section id="ess-mean-median-and-mode-34" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-34">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Turkey/turkey_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Turkey ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-34" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-34">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Turkey/turkey_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Turkey Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-34" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-34">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Turkey/turkey_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Turkey WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="ukraine" class="level3">
+<h3 class="anchored" data-anchor-id="ukraine">Ukraine</h3>
+<section id="ess-mean-median-and-mode-35" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-35">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Ukraine/ukraine_ess.png" class="img-fluid figure-img"></p>
+<figcaption>Ukraine ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-35" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-35">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Ukraine/ukraine_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Ukraine Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-35" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-35">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/Ukraine/ukraine_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>Ukraine WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+<section id="united-kingdom" class="level3">
+<h3 class="anchored" data-anchor-id="united-kingdom">United Kingdom</h3>
+<section id="ess-mean-median-and-mode-36" class="level4">
+<h4 class="anchored" data-anchor-id="ess-mean-median-and-mode-36">ESS mean, median, and mode</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/United%20Kingdom/united_kingdom_ess.png" class="img-fluid figure-img"></p>
+<figcaption>United Kingdom ESS mean, median, and mode</figcaption>
+</figure>
+</div>
+</section>
+<section id="net-personal-wealth-distribution-36" class="level4">
+<h4 class="anchored" data-anchor-id="net-personal-wealth-distribution-36">Net personal wealth distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/United%20Kingdom/united_kingdom_wealth_shares.png" class="img-fluid figure-img"></p>
+<figcaption>United Kingdom Net personal wealth distribution</figcaption>
+</figure>
+</div>
+</section>
+<section id="wid-national-income-distribution-36" class="level4">
+<h4 class="anchored" data-anchor-id="wid-national-income-distribution-36">WID national income distribution</h4>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/descriptive/timeseries/United%20Kingdom/united_kingdom_income_shares.png" class="img-fluid figure-img"></p>
+<figcaption>United Kingdom WID national income distribution</figcaption>
+</figure>
+</div>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
