@@ -6,6 +6,7 @@ paths <- list(
   wid_change_figures = "figures/descriptive/distribution_change/wid",
   ess_change_figures = "figures/descriptive/distribution_change/ess",
   association_figures = "figures/descriptive/ess_wid_association",
+  middle_wealth_figures = "figures/middle_wealth_satisfaction",
   association_table = "data/processed/ess_wid_country_round.csv"
 )
 
@@ -24,7 +25,8 @@ module_files <- c(
   coverage = "modules/data_coverage/data_coverage.R",
   distribution_change = "modules/distribution_change/distribution_change.R",
   satisfaction_change = "modules/satisfaction_change/satisfaction_change.R",
-  association = "modules/satisfaction_association/satisfaction_association.R"
+  association = "modules/satisfaction_association/satisfaction_association.R",
+  middle_wealth = "modules/middle_wealth_satisfaction/middle_wealth_satisfaction.R"
 )
 
 # ESS rounds are two-year windows counted from this year.

@@ -1,0 +1,139 @@
+## Middle-40% Wealth and Economic Satisfaction: Country Cases
+
+This section focuses on the middle 40% of the wealth distribution (percentiles
+50-90) and mean satisfaction with the state of the economy (`stfeco`, on a 0-10
+scale). Wealth is measured as this group's **share of net personal wealth**, not
+its absolute wealth. These are repeated country-level summaries, not observations
+of the same individuals or evidence about middle-wealth respondents' satisfaction.
+
+### Country Screening
+
+To avoid comparisons directly involving the financial-crisis year, observations in
+`r paste(analysis$middle_wealth$settings$excluded_years, collapse = ", ")` are removed
+before forming periods. This applies to both satisfaction and lagged wealth years.
+Periods crossing an excluded year are split; each remaining complete sequence is assessed
+if it meets the sample requirement. This does not remove possible crisis
+aftereffects in subsequent years. Other report sections are unchanged.
+
+For each country, all complete consecutive sequences of valid calendar-year observations
+are screened. At least
+`r analysis$middle_wealth$settings$minimum_lag_pairs` exact one-year-lag pairs and
+nonconstant measures in both comparisons are required. No missing years are filled
+or bridged. We do not search arbitrary subwindows to maximize a coefficient.
+
+Up to `r analysis$middle_wealth$settings$cases_per_sign` positive and
+`r analysis$middle_wealth$settings$cases_per_sign` negative cases are ranked by
+same-year Pearson effect strength, with no fixed correlation cutoff. One period per
+country and sign is retained; a country can appear in both groups when its association
+changes direction between periods. Length breaks effect-strength ties rather than
+determining which period is considered. Both comparisons use identical satisfaction years:
+wealth at t versus satisfaction at t, and wealth at t-1 versus satisfaction at t.
+The initial year supplies lagged wealth only. Only the selected cases appear below.
+
+Available cases: **`r sum(analysis$middle_wealth$cases$pearson > 0)` positive** and
+**`r sum(analysis$middle_wealth$cases$pearson < 0)` negative**. If fewer than five
+qualified cases exist in either direction, the remaining places are left unfilled.
+
+```{r}
+#| label: middle-wealth-screening
+#| echo: false
+if ("screening" %in% names(analysis$middle_wealth$plot_files)) {
+  knitr::include_graphics(analysis$middle_wealth$plot_files[["screening"]])
+}
+```
+
+Bars show same-year Pearson correlations on the shared lag-supported sample.
+"Strongest" means highest-ranked within the available cases, not necessarily a
+large coefficient. Short series, time trends, outliers, and
+selection on observed correlations can all produce apparently strong relationships;
+these cases are exploratory and are not significance tests or causal estimates.
+
+Persistence across the lag is informative as well as same-year effect strength.
+Germany illustrates this: its 2009-2012 association is positive in both comparisons,
+while its 2003-2006 association is negative in both. These are consistent directions
+within each period, not one constant direction across Germany's full series.
+Pearson/Spearman agreement and the lag interpretation below help distinguish persistent
+patterns from associations that weaken or reverse. Three-pair cases remain fragile:
+a large coefficient alone does not establish a robust or causal effect.
+
+### Selected Cases
+
+The table and scatterplot compare the shared eligible years within each selected period: teal
+circles pair wealth and satisfaction in the same year; orange triangles pair wealth
+in year t-1 with satisfaction in year t. Its solid and dashed fits and displayed
+coefficients correspond to those two pairings. A negative Pearson r means higher
+wealth share tends to coincide with lower satisfaction; it does not mean wealth
+caused satisfaction to fall. Values near zero show little linear co-movement, while
+values nearer -1 or +1 indicate stronger negative or positive co-movement. Pair
+counts matter: series without sufficient exact one-year pairs are excluded entirely.
+
+For the selected periods below, the accompanying interpretation instead compares the
+two observed endpoints directly. Wealth movement is reported in **percentage points
+of wealth share** and satisfaction movement in **scale points**. Opposite signs mean
+the measures moved in opposite directions over that interval; matching signs mean
+they moved in the same direction. This is a description of concurrent country-level
+movement, not a causal effect or an individual-level relationship.
+
+```{r}
+#| label: middle-wealth-case-selection
+#| echo: false
+cases <- analysis$middle_wealth$cases
+if (nrow(cases)) {
+  case_summary <- cases[c(
+    "country", "period_start", "period_end", "period_source",
+    "wealth_share_change_pp", "satisfaction_change_points", "same_year_pearson",
+    "same_year_n", "lag_pearson", "lag_n", "selection_reason"
+  )]
+  case_summary$same_year <- sprintf(
+    "%.2f (n=%d)", case_summary$same_year_pearson, case_summary$same_year_n
+  )
+  case_summary$one_year_lag <- ifelse(
+    is.finite(case_summary$lag_pearson),
+    sprintf("%.2f (n=%d)", case_summary$lag_pearson, case_summary$lag_n),
+    sprintf("NA (n=%d)", case_summary$lag_n)
+  )
+  case_summary <- case_summary[c(
+    "country", "period_start", "period_end", "period_source", "wealth_share_change_pp",
+    "satisfaction_change_points", "same_year", "one_year_lag", "selection_reason"
+  )]
+  knitr::kable(
+    case_summary,
+    col.names = c("Country", "Period start", "Period end", "Period basis",
+                  "Wealth-share change (pp)", "Satisfaction change (points)",
+                  "Same-year Pearson (n)", "1-year lag Pearson (n)", "Selected for"),
+    digits = 2, row.names = FALSE
+  )
+}
+```
+
+Each case description interprets the interval changes before its year-labelled
+wealth-satisfaction comparison and two aligned time-series panels in their original
+units. Lines connect adjacent observed calendar years only; gaps remain unconnected.
+Orange triangles are the one-year-lag pairs. Dotted year markers identify the case
+interval endpoints in the time-series panels. Change magnitudes use the actual year
+gap, including gaps spanning missing rounds; they do not locate when movement occurred
+within the interval. Wealth-share and satisfaction axes are separate, so apparent
+co-movement is not imposed by choosing a dual-axis scale.
+
+```{r}
+#| label: middle-wealth-country-cases
+#| echo: false
+#| results: asis
+if (!nrow(cases)) {
+  cat("No country series meet the configured coverage criteria.\n")
+}
+for (case_index in seq_len(nrow(cases))) {
+  case <- cases[case_index, ]
+  cat("\n\n### ", case$country, ": ", case$period_start, "-", case$period_end, "\n\n", sep = "")
+  cat(case$selection_reason, ". ", case$rounds, " valid annual observations from ",
+      case$first_year, " to ", case$last_year, ".\n\n", sep = "")
+  cat(sprintf(
+    "Same-year Pearson r = %.2f; one-year-lag Pearson r = %.2f, using %d paired years. %s\n\n",
+    case$same_year_pearson, case$lag_pearson, case$lag_n, case$period_interpretation
+  ))
+  cat(case$lag_interpretation, "\n\n")
+  cat(sprintf("Spearman: same-year %.2f; one-year lag %.2f.\n\n",
+              case$same_year_spearman, case$lag_spearman))
+  cat("![](", analysis$middle_wealth$case_files[[case$case_id]], ")\n\n", sep = "")
+}
+```

@@ -24,3 +24,5 @@ analysis <- run_analysis()
 {{< include modules/distribution_change/_distribution_change.qmd >}}
 
 {{< include modules/satisfaction_change/_satisfaction_change.qmd >}}
+
+{{< include modules/middle_wealth_satisfaction/_middle_wealth_satisfaction.qmd >}}
