@@ -1,0 +1,23 @@
+## Economic Satisfaction Change
+
+Satisfaction changes are calculated from the survey summaries. The mean measures
+movement in average satisfaction with the state of the economy; the IQR measures
+change in spread. Both are annualized absolute changes in satisfaction scale points.
+Years use two-year survey rounds anchored at 2002, with the earliest available
+valid matched observation in each round. Transitions compare consecutive selected
+observations; gaps may span more than one round.
+
+### Largest Satisfaction Mean and IQR Changes
+
+The largest mean changes are ranked by annualized magnitude. The IQR panel shows
+the observed IQR at both survey endpoints for the largest annualized IQR changes,
+making the before/after spread visible. Segment color indicates whether the IQR
+widened or narrowed; an asterisk marks an unreliable or unclassified endpoint.
+
+```{r}
+#| label: ess-largest-changes
+#| echo: false
+if (length(analysis$satisfaction_change$plot_files)) {
+  knitr::include_graphics(analysis$satisfaction_change$plot_files[["top_changes"]])
+}
+```

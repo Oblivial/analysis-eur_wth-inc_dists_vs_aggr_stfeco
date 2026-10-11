@@ -1,8 +1,10 @@
+# Resolve shared code and named module dependencies for a cache fingerprint.
 code_files_for <- function(...) {
   modules <- c(...)
   project_path(c(core_files, unname(module_files[modules])))
 }
 
+# Hash file paths, sizes, and modification times without reading the raw datasets.
 fingerprint_files <- function(files) {
   info <- file.info(files)
   listing_file <- tempfile()
@@ -23,7 +25,7 @@ cached_result <- function(name, input_files, code_files, compute,
   if (file.exists(cache_file)) {
     entry <- readRDS(cache_file)
     if (identical(entry$key, key) &&
-        all(file.exists(project_path(entry$output_files)))) {
+          all(file.exists(project_path(entry$output_files)))) {
       return(entry$value)
     }
   }

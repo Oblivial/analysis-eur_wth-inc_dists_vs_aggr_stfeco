@@ -11,10 +11,10 @@ comparability.
 #| label: data-validity-summary
 #| echo: false
 knitr::kable(
-	data_validity$summary,
-	col.names = c(
-		"Validity check", "Passing country-years", "Matched country-years"
-	),
-	row.names = FALSE
+  analysis$validity$summary,
+  col.names = c(
+    "Validity check", "Passing country-years", "Matched country-years"
+  ),
+  row.names = FALSE
 )
 ```

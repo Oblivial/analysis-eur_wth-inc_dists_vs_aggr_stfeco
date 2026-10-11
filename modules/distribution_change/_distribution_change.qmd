@@ -1,0 +1,74 @@
+## Income and Wealth Distribution Change
+
+This section summarizes annualized income and wealth distribution changes for
+countries with matched economic satisfaction data. Years use two-year survey rounds
+anchored at 2002; the earliest matched observation in each round is used. Each
+reported transition compares consecutive selected survey observations, skipping
+intervening distribution years. WID post-tax national-income shares are used where
+available, with pre-tax shares as a fallback. For each transition, the score is
+the mean absolute change across the nine cumulative decile-share cutoffs,
+divided by the gap between survey observations. It is a magnitude in percentage
+points per year; it does not indicate whether inequality rose or fell. The
+metric uses the cumulative share profile directly, so it also applies when net
+wealth shares are negative.
+
+### Satisfaction Change Against Distribution Change
+
+These transition-level comparisons relate the annualized absolute satisfaction mean
+change to the annualized income or wealth distribution-change magnitude.
+`r paste(analysis$distribution_change$comparisons$description, collapse = " ")`
+Only reliable satisfaction
+transitions and non-extrapolated distribution transitions are included. Both measures
+are magnitudes, so these associations do not show whether satisfaction or
+inequality rose or fell. Correlations are descriptive.
+
+```{r}
+#| label: ess-wid-change-correlations
+#| echo: false
+knitr::kable(
+  analysis$distribution_change$change_association[c(
+    "concept", "alignment", "n", "pearson", "spearman"
+  )],
+  digits = 2,
+  row.names = FALSE
+)
+```
+
+```{r}
+#| label: ess-wid-change-scatter
+#| echo: false
+if ("change_association" %in% names(analysis$distribution_change$plot_files)) {
+  knitr::include_graphics(
+    analysis$distribution_change$plot_files[["change_association"]]
+  )
+}
+```
+
+### Wealth and Income Change by Country
+
+Each point is a country, positioned by its median annualized change for wealth
+and income. Point size represents the country's median annualized absolute satisfaction
+mean change in scale points per year. Larger values mean more movement in the
+cumulative share profile; no direction is implied.
+
+```{r}
+#| label: wid-change-scatter
+#| echo: false
+knitr::include_graphics(
+  analysis$distribution_change$plot_files[["scatter"]]
+)
+```
+
+### Largest Income and Wealth Changes
+
+The top transitions are ranked by annualized magnitude and use consecutive survey
+observation years as endpoints. An asterisk indicates that one endpoint falls
+within a WID metadata-declared extrapolation interval.
+
+```{r}
+#| label: wid-largest-changes
+#| echo: false
+knitr::include_graphics(
+  analysis$distribution_change$plot_files[["top_changes"]]
+)
+```

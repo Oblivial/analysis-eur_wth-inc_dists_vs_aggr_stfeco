@@ -1,0 +1,7 @@
+linters: linters_with_defaults(
+    object_usage_linter = NULL,
+    object_length_linter(40L),
+    line_length_linter(100L)
+  )
+encoding: "UTF-8"
+exclusions: list("index_files", ".cache", "data")

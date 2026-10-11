@@ -3,14 +3,14 @@
 ### Common Countries by Year
 
 The bar height counts country-years that pass the validity rules above and match
-in ESS and both WID series. Labels show `valid (matched / excluded)`, for example
+across satisfaction, income and wealth. Labels show `valid (matched / excluded)`, for example
 `15 (18/3)`.
 
 ```{r}
 #| label: coverage-countries-per-year-plot
 #| echo: false
-if (length(data_coverage$plot_files)) {
-  knitr::include_graphics(data_coverage$plot_files[["countries_per_year"]])
+if (length(analysis$coverage$plot_files)) {
+  knitr::include_graphics(analysis$coverage$plot_files[["countries_per_year"]])
 }
 ```
 
@@ -22,8 +22,8 @@ The bar length counts valid matched years for each country. Labels show
 ```{r}
 #| label: coverage-years-per-country-plot
 #| echo: false
-if (length(data_coverage$plot_files)) {
-  knitr::include_graphics(data_coverage$plot_files[["years_per_country"]])
+if (length(analysis$coverage$plot_files)) {
+  knitr::include_graphics(analysis$coverage$plot_files[["years_per_country"]])
 }
 ```
 

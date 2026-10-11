@@ -1,150 +1,91 @@
-parse_validity_intervals <- function(text) {
-  if (is.na(text) || !nzchar(trimws(text))) return(matrix(integer(), ncol = 2))
-  parsed <- tryCatch(
-    jsonlite::fromJSON(text, simplifyVector = FALSE),
-    error = function(error) NULL
+validity_rules <- data.frame(
+  field = c(
+    "ess_reliable", "wealth_complete", "wealth_not_extrapolated",
+    "income_complete", "income_not_extrapolated"
+  ),
+  passing_label = c(
+    "Satisfaction estimate reliable", "Complete valid wealth deciles", "Wealth not extrapolated",
+    "Complete valid income deciles", "Income not extrapolated"
+  ),
+  exclusion_reason = c(
+    "satisfaction estimate unreliable", "wealth deciles incomplete or invalid",
+    "wealth extrapolated",
+    "income deciles incomplete or invalid", "income extrapolated"
   )
-  values <- unlist(parsed, use.names = FALSE)
-  if (!length(values) || length(values) %% 2L != 0L) {
-    return(matrix(integer(), ncol = 2))
-  }
-  matrix(as.integer(values), ncol = 2, byrow = TRUE)
+)
+
+# Check satisfaction reliability and both distributions' completeness and provenance.
+assess_country_year <- function(match, ess, year) {
+  wealth <- match$wid[match$wid$concept == "wealth", , drop = FALSE]
+  income <- match$wid[match$wid$concept == "income", , drop = FALSE]
+  # Missing reliability is unknown and therefore fails the validity gate.
+  c(
+    ess_reliable = isTRUE(ess$reliable[match(year, ess$year)]),
+    wealth_complete = !is.null(decile_shares_for_year(wealth, year)),
+    wealth_not_extrapolated = !is_extrapolated_year(year, match$extrapolation$wealth),
+    income_complete = !is.null(decile_shares_for_year(income, year)),
+    income_not_extrapolated = !is_extrapolated_year(year, match$extrapolation$income)
+  )
 }
 
-is_year_extrapolated <- function(year, intervals) {
-  if (!nrow(intervals)) return(FALSE)
-  any(year >= intervals[, 1L] & year <= intervals[, 2L])
-}
-
-is_complete_wid_decile_distribution <- function(data, year) {
-  rows <- data[data$year == year, , drop = FALSE]
-  if (anyDuplicated(rows$percentile)) return(FALSE)
-  positions <- match(decile_codes, rows$percentile)
-  if (anyNA(positions)) return(FALSE)
-  shares <- rows$value[positions]
-  all(is.finite(shares)) && abs(sum(shares) - 1) <= 0.025
-}
-
-assess_data_validity <- function(matching) {
-  observations <- list()
-  for (country in names(matching$matches)) {
-    match <- matching$matches[[country]]
-    metadata <- read_wid_metadata(match$wid_code)
-    intervals <- lapply(names(match$variables), function(concept) {
-      variable <- match$variables[[concept]]
-      row <- metadata[metadata$variable == variable, , drop = FALSE]
-      parse_validity_intervals(row$extrapolation[[1L]])
-    })
-    names(intervals) <- names(match$variables)
-    country_ess <- matching$ess[
-      matching$ess$country == country & matching$ess$year %in% match$years,
-      , drop = FALSE
-    ]
-
+# Audit every matched country-year and summarize how many pass each validity rule.
+assess_data_validity <- function(matching, rules = validity_rules) {
+  failures <- stats::setNames(rules$exclusion_reason, rules$field)
+  rows <- list()
+  for (match in matching$matches) {
+    ess <- matching$ess[matching$ess$country == match$country, , drop = FALSE]
     for (year in match$years) {
-      ess_row <- country_ess[country_ess$year == year, , drop = FALSE]
-      ess_reliable <- nrow(ess_row) == 1L && isTRUE(ess_row$reliable[[1L]])
-      wealth_data <- match$wid[
-        match$wid$concept == "wealth", , drop = FALSE
-      ]
-      income_data <- match$wid[
-        match$wid$concept == "income", , drop = FALSE
-      ]
-      wealth_complete <- is_complete_wid_decile_distribution(wealth_data, year)
-      income_complete <- is_complete_wid_decile_distribution(income_data, year)
-      wealth_extrapolated <- is_year_extrapolated(
-        year, intervals[["wealth"]]
-      )
-      income_extrapolated <- is_year_extrapolated(
-        year, intervals[["income"]]
-      )
-      valid <- ess_reliable && wealth_complete && income_complete &&
-        !wealth_extrapolated && !income_extrapolated
-
-      reasons <- c(
-        if (!ess_reliable) "ESS unreliable",
-        if (!wealth_complete) "wealth deciles incomplete or invalid",
-        if (wealth_extrapolated) "wealth extrapolated",
-        if (!income_complete) "income deciles incomplete or invalid",
-        if (income_extrapolated) "income extrapolated"
-      )
-      observations[[length(observations) + 1L]] <- data.frame(
-        country = country,
+      checks <- assess_country_year(match, ess, year)
+      rows[[length(rows) + 1L]] <- data.frame(
+        country = match$country,
         wid_code = match$wid_code,
         year = year,
-        ess_reliable = ess_reliable,
-        wealth_complete = wealth_complete,
-        wealth_extrapolated = wealth_extrapolated,
-        wealth_valid = wealth_complete && !wealth_extrapolated,
-        income_complete = income_complete,
-        income_extrapolated = income_extrapolated,
-        income_valid = income_complete && !income_extrapolated,
-        valid = valid,
-        exclusion_reason = if (length(reasons)) paste(reasons, collapse = "; ") else "",
-        stringsAsFactors = FALSE
+        as.list(checks),
+        valid = all(checks),
+        exclusion_reason = paste(failures[names(checks)[!checks]], collapse = "; ")
       )
     }
   }
+  observations <- bind_rows(rows)
 
-  if (length(observations)) {
-    observations <- do.call(rbind, observations)
-    rownames(observations) <- NULL
-  } else {
-    observations <- data.frame(
-      country = character(), wid_code = character(), year = integer(),
-      ess_reliable = logical(), wealth_complete = logical(),
-      wealth_extrapolated = logical(), wealth_valid = logical(),
-      income_complete = logical(), income_extrapolated = logical(),
-      income_valid = logical(), valid = logical(), exclusion_reason = character()
-    )
-  }
-
-  check_names <- c(
-    ess_reliable = "ESS reliable",
-    wealth_complete = "Complete valid wealth deciles",
-    wealth_extrapolated = "Wealth not extrapolated",
-    income_complete = "Complete valid income deciles",
-    income_extrapolated = "Income not extrapolated",
-    valid = "Pass all validity checks"
-  )
+  labels <- c(stats::setNames(rules$passing_label, rules$field), valid = "Pass all validity checks")
   summary <- data.frame(
-    check = unname(check_names),
-    passing_country_years = vapply(names(check_names), function(field) {
-      if (field %in% c("wealth_extrapolated", "income_extrapolated")) {
-        sum(!observations[[field]])
-      } else {
-        sum(observations[[field]])
-      }
-    }, integer(1)),
-    total_comparable_country_years = nrow(observations),
-    stringsAsFactors = FALSE
+    check = unname(labels),
+    passing_country_years = vapply(names(labels), function(field) {
+      sum(observations[[field]])
+    }, integer(1), USE.NAMES = FALSE),
+    total_comparable_country_years = nrow(observations)
   )
   list(observations = observations, summary = summary)
 }
 
+# Restrict every downstream data component to the same valid country-year sample.
 filter_to_valid_comparable_data <- function(matching, validity) {
-  valid_rows <- validity$observations[validity$observations$valid, , drop = FALSE]
-  matches <- list()
-
-  for (country in names(matching$matches)) {
-    match <- matching$matches[[country]]
-    years <- sort(valid_rows$year[valid_rows$country == country])
-    if (!length(years)) next
-    match$years <- years
-    match$change_years <- select_ess_round_years(years)
-    match$wid <- match$wid[match$wid$year %in% years, , drop = FALSE]
-    matches[[country]] <- match
+  observations <- validity$observations
+  if (!nrow(observations)) {
+    return(list(ess = matching$ess[0, ], matches = list(), country_years = data.frame()))
   }
+  valid <- observations[observations$valid, c("country", "wid_code", "year")]
+  rownames(valid) <- NULL
 
-  valid_keys <- valid_rows[, c("country", "wid_code", "year"), drop = FALSE]
-  ess_keys <- paste(matching$ess$country, matching$ess$year, sep = "\r")
-  valid_ess_keys <- paste(valid_keys$country, valid_keys$year, sep = "\r")
-  ess <- matching$ess[ess_keys %in% valid_ess_keys, , drop = FALSE]
-  country_years <- valid_keys
-  rownames(country_years) <- NULL
-  list(ess = ess, matches = matches, country_years = country_years)
+  matches <- lapply(matching$matches, function(match) {
+    years <- sort(valid$year[valid$country == match$country])
+    if (!length(years)) return(NULL)
+    match$years <- years
+    match$change_years <- select_survey_round_years(years)
+    match$wid <- match$wid[match$wid$year %in% years, , drop = FALSE]
+    match
+  })
+
+  ess_keys <- paste(matching$ess$country, matching$ess$year)
+  list(
+    ess = matching$ess[ess_keys %in% paste(valid$country, valid$year), , drop = FALSE],
+    matches = Filter(Negate(is.null), matches),
+    country_years = valid
+  )
 }
 
+# Cache the validity audit using source-input and matching-code fingerprints.
 run_data_validity <- function(matching) {
   cached_result(
     "data_validity",

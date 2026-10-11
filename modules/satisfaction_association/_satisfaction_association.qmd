@@ -1,0 +1,137 @@
+## Satisfaction and Income/Wealth Association
+
+The merged table uses the earliest matched observation in each two-year ESS
+round and the corresponding WID distribution. It retains ESS reliability,
+effective sample size, the selected post-tax income series where available,
+and WID extrapolation flags. The full country-round table is available as
+[data/processed/ess_wid_country_round.csv](data/processed/ess_wid_country_round.csv).
+
+All summaries and correlations below use ESS observations flagged reliable.
+Correlations are descriptive only; no significance tests are performed. Gini
+values are approximated from WID's ten decile shares. Palma is the top 10% share
+divided by the bottom 40% share; wealth Palma is missing when bottom-40 net wealth
+is zero or negative.
+
+### Variance Decomposition
+
+Between-country and within-country percentages describe where the reliable
+country-round variation in each measure occurs.
+
+```{r}
+#| label: association-variance-decomposition
+#| echo: false
+knitr::kable(analysis$association$variance, digits = 2, row.names = FALSE)
+```
+
+### Measure Selection
+
+The following selections apply to all correlation and variance tables in this section.
+
+```{r}
+#| label: association-measure-selection
+#| echo: false
+knitr::kable(
+  analysis$association$measure_selection,
+  col.names = c("Satisfaction measure", "Correlations", "Variance decomposition"),
+  row.names = FALSE
+)
+```
+
+### Between-Country Association
+
+Each point is a country's mean across reliable survey rounds. The two panels compare
+mean economic satisfaction with the corresponding income or wealth Gini. Only a
+few extreme points are labeled to keep the scatter readable.
+
+```{r}
+#| label: association-between-country
+#| echo: false
+knitr::include_graphics(analysis$association$plot_files[["between"]])
+```
+
+### Within-Country Association
+
+Values are demeaned within each country, separating changes over time from
+persistent differences between countries.
+
+```{r}
+#| label: association-within-country
+#| echo: false
+knitr::include_graphics(analysis$association$plot_files[["within"]])
+```
+
+### Satisfaction by Year
+
+The line shows the reliable cross-country mean by year; the band spans the
+cross-country 25th to 75th percentiles. Larger points indicate more reliable
+country observations in that year.
+
+```{r}
+#| label: association-year-pattern
+#| echo: false
+knitr::include_graphics(analysis$association$plot_files[["year_patterns"]])
+```
+
+### Selected Correlation Scatterplots
+
+These pooled country-round comparisons show the three distribution metrics in each
+domain with the largest absolute Spearman correlations. Each metric is paired with
+its strongest selected satisfaction summary. Wealth middle-40% and income bottom-50%
+shares are always included when a usable pairing exists. The table identifies the
+actual measures selected; share axes are percentages.
+
+Selection is exploratory, not evidence of statistical significance or causation.
+Countries contribute repeated observations, so these pooled correlations combine
+between-country differences with changes over time. Each point is a reliable
+country-round; red lines are descriptive ordinary least-squares fits.
+
+```{r}
+#| label: association-selected-pairs
+#| echo: false
+knitr::kable(
+  analysis$association$selected_associations[c(
+    "distribution_label", "satisfaction_label", "n", "countries", "pearson", "spearman"
+  )],
+  col.names = c("Distribution measure", "Satisfaction measure", "Rounds", "Countries",
+                "Pearson", "Spearman"),
+  digits = 2, row.names = FALSE
+)
+```
+
+#### Wealth
+
+```{r}
+#| label: association-selected-wealth
+#| echo: false
+if ("selected_wealth" %in% names(analysis$association$plot_files)) {
+  knitr::include_graphics(analysis$association$plot_files[["selected_wealth"]])
+}
+```
+
+#### Income
+
+```{r}
+#| label: association-selected-income
+#| echo: false
+if ("selected_income" %in% names(analysis$association$plot_files)) {
+  knitr::include_graphics(analysis$association$plot_files[["selected_income"]])
+}
+```
+
+### Correlations
+
+Satisfaction-only tables describe redundancy among survey summaries. Income and
+wealth tables compare satisfaction measures against one distribution domain at a
+time; distribution measures are not correlated with one another. Each coefficient
+uses the available observations for that pair of measures.
+
+```{r}
+#| label: association-correlation-tables
+#| echo: false
+#| results: asis
+for (section in analysis$association$report_tables) {
+  cat("\n\n#### ", section$title, "\n\n", sep = "")
+  print(knitr::kable(section$table, digits = 2, row.names = FALSE))
+  cat("\n\n")
+}
+```
