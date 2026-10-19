@@ -63,6 +63,107 @@ panel$income_bottom_50_share[[1L]] <- 0.1
 scatter_pairs <- select_association_scatters(panel)
 stopifnot("income_bottom_50_share" %in% scatter_pairs$distribution)
 
+regime_panel <- data.frame(
+  country = c("A", "A", "B", "A", rep("C", 3), rep("D", 3), "E", "E", "Unknown"),
+  ess_mean = c(1, 2, 3, 100, 3, 2, 1, 1, 2, 3, 1, 2, 1),
+  wealth_decile_gini = c(1, 2, 3, NA, 1, 2, 3, 1, 1, 1, 1, 2, 1),
+  wealth_middle_40_share = c(1, NA, 3, NA, 1, 2, 3, 1, 1, 1, 1, 2, Inf)
+)
+regime_typology <- data.frame(
+  Country = c("A", "B", "C", "D", "E"),
+  EA_Type = c("Liberal", "Liberal", "Conservative", "Socialist", "Hybrid1")
+)
+classification_warning <- NULL
+regime_panel <- withCallingHandlers(
+  attach_welfare_regimes(regime_panel, regime_typology),
+  warning = function(condition) {
+    classification_warning <<- conditionMessage(condition)
+    invokeRestart("muffleWarning")
+  }
+)
+regime_measures <- define_association_measures()
+regime_measures$satisfaction <- regime_measures$satisfaction["ess_mean"]
+regime_measures$distributions$wealth <- regime_measures$distributions$wealth[
+  c("wealth_decile_gini", "wealth_middle_40_share")
+]
+regime_correlations <- compute_wealth_regime_correlations(regime_panel, regime_measures)
+gini_regimes <- regime_correlations[
+  regime_correlations$distribution_label == "Wealth decile Gini", ]
+liberal_share <- regime_correlations[
+  regime_correlations$welfare_regime == "Liberal" &
+    regime_correlations$distribution_label == "Wealth middle 40% share", ]
+stopifnot(
+  grepl("Unknown", classification_warning),
+  nrow(regime_panel) == 13L, regime_panel$welfare_regime[[13L]] == "Not classified",
+  nrow(regime_correlations) == 2L * length(welfare_regime_levels),
+  identical(gini_regimes$welfare_regime, welfare_regime_levels),
+  identical(gini_regimes$n, c(3L, 3L, 3L, 2L, rep(0L, 5), 1L)),
+  identical(gini_regimes$countries, c(2L, 1L, 1L, 1L, rep(0L, 5), 1L)),
+  isTRUE(all.equal(gini_regimes$pearson[1:2], c(1, -1))),
+  isTRUE(all.equal(gini_regimes$spearman[1:2], c(1, -1))),
+  all(is.na(gini_regimes$pearson[3:nrow(gini_regimes)])),
+  gini_regimes$status[[3L]] == "Constant measure",
+  all(gini_regimes$status[4:nrow(gini_regimes)] == "Fewer than 3 pairs"),
+  liberal_share$n == 2L, is.na(liberal_share$pearson),
+  all(compute_wealth_regime_correlations(regime_panel[0, ], regime_measures)$n == 0L)
+)
+invalid_typology <- rbind(regime_typology, regime_typology[1, ])
+stopifnot(inherits(
+  try(attach_welfare_regimes(regime_panel, invalid_typology), silent = TRUE),
+  "try-error"
+))
+
+post_panel <- data.frame(
+  country = rep(c("Estonia", "Portugal", "Iceland", "Turkey", "Unknown"), each = 3),
+  ess_mean = c(3, 2, 1, rep(1:3, 4)),
+  wealth_decile_gini = rep(1:3, 5),
+  wealth_middle_40_share = rep(1:3, 5)
+)
+post_typology <- data.frame(
+  Country = c("Estonia", "Portugal", "Iceland", "Turkey"),
+  EA_Type = c("Post-Communist", "Southern European", "Social Democratic", "Other/Non-EU")
+)
+post_panel <- suppressWarnings(attach_welfare_regimes(post_panel, post_typology))
+post_correlations <- compute_wealth_regime_correlations(
+  post_panel, regime_measures,
+  group_field = "post_communist_status", group_levels = post_communist_levels
+)
+post_gini <- post_correlations[
+  post_correlations$distribution_label == "Wealth decile Gini", ]
+stopifnot(
+  identical(post_gini$post_communist_status, post_communist_levels),
+  identical(post_gini$n, c(3L, 9L, 3L)),
+  identical(post_gini$countries, c(1L, 3L, 1L)),
+  isTRUE(all.equal(post_gini$pearson, c(-1, 1, 1))),
+  isTRUE(all.equal(post_gini$spearman, c(-1, 1, 1))),
+  all(compute_wealth_regime_correlations(
+    post_panel[0, ], regime_measures,
+    group_field = "post_communist_status", group_levels = post_communist_levels
+  )$n == 0L)
+)
+
+focused_correlations <- compute_focused_wealth_correlations(post_panel)
+focused_post <- focused_correlations[
+  focused_correlations$welfare_regime == "Post-Communist", ]
+focused_non_post <- tail(focused_correlations, 1)
+stopifnot(
+  nrow(focused_correlations) == length(welfare_regime_levels) + 2L,
+  identical(focused_correlations$welfare_regime, c(
+    "All countries", welfare_regime_levels, "All non-Post-Communist regimes"
+  )),
+  all(focused_correlations$distribution_label == "Wealth middle 40% share"),
+  all(focused_correlations$satisfaction_label == "Satisfaction mean"),
+  focused_correlations$n[[1L]] == 15L,
+  focused_correlations$countries[[1L]] == 5L,
+  focused_post$n == 3L, focused_post$pearson == -1,
+  focused_post$post_communist_status == "Post-Communist",
+  focused_non_post$n == 9L, focused_non_post$countries == 3L,
+  focused_non_post$pearson == 1,
+  focused_non_post$post_communist_status == "Not Post-Communist",
+  sum(focused_correlations$post_communist_status == "Post-Communist") == 1L,
+  all(compute_focused_wealth_correlations(post_panel[0, ])$n == 0L)
+)
+
 matching <- list(
   ess = data.frame(country = "A", year = 2002L, reliable = FALSE),
   matches = list(list(
@@ -80,6 +181,7 @@ case_panel <- data.frame(
   country = "A", year = c(2002L, 2004L, 2008L, 2010L, 2012L),
   ess_round = c(1L, 2L, 4L, 5L, 6L), ess_mean = c(1, 2, 3, 5, 6),
   wealth_middle_40_share = c(0.2, 0.3, 0.4, 0.5, 0.6),
+  cpi2 = c(90, 100, 120, 135, 150),
   ess_reliable = TRUE, wealth_extrapolated = FALSE, income_extrapolated = FALSE
 )
 screening <- screen_middle_wealth_cases(middle_wealth_panel(case_panel))
@@ -107,8 +209,66 @@ stopifnot(
   focused_cases$period_source == "Requested interval",
   isTRUE(all.equal(focused_cases$wealth_share_change_pp, 10)),
   isTRUE(all.equal(focused_cases$satisfaction_change_points, 2)),
+  isTRUE(all.equal(focused_cases$cpi2_change, 15)),
   grepl("increased by 10.00 percentage points", focused_cases$period_interpretation),
-  grepl("increased by 2.00 scale points", focused_cases$period_interpretation)
+  grepl("increased by 2.00 scale points", focused_cases$period_interpretation),
+  grepl("CWS CPI2 changed by 15.00 index points", focused_cases$period_interpretation)
+)
+prepared_cpi2 <- prepare_cws_cpi2(data.frame(
+  id = c("FRG", "AUL", "AUL"), year = c("2000", "2000", "2001"),
+  cpi2 = c("100", NA, "110")
+))
+stopifnot(
+  identical(prepared_cpi2$country, c("Germany", "Australia")),
+  identical(prepared_cpi2$year, c(2000L, 2001L)),
+  identical(prepared_cpi2$cpi2, c(100, 110))
+)
+stopifnot(inherits(
+  try(prepare_cws_cpi2(data.frame(id = "XYZ", year = 2000, cpi2 = 1)), silent = TRUE),
+  "try-error"
+))
+cpi2_matching <- list(
+  ess = data.frame(country = "Germany", year = c(2002L, 2004L), mean = c(3, 5)),
+  matches = list(list(
+    country = "Germany", years = c(2002L, 2004L),
+    wid = data.frame(
+      concept = "wealth", year = rep(c(2002L, 2004L), each = length(decile_codes)),
+      percentile = rep(decile_codes, 2), value = rep(0.1, 2 * length(decile_codes))
+    )
+  ))
+)
+annual_cpi2 <- annual_middle_wealth_panel(
+  cpi2_matching,
+  data.frame(country = "Germany", year = c(2002L, 2004L), cpi2 = c(100, 120))
+)
+stopifnot(identical(annual_cpi2$cpi2, c(100, 120)))
+local({
+  plot_file <- paste0(".cpi2_change_test_", Sys.getpid(), ".png")
+  on.exit(unlink(project_path(plot_file)), add = TRUE)
+  plotted <- plot_cpi2_satisfaction_changes(data.frame(
+    country = c("A", "B"), period_start = c(2002L, 2004L),
+    period_end = c(2004L, 2006L), cpi2_change = c(10, 15),
+    satisfaction_change_points = c(1, -1)
+  ), plot_file)
+  stopifnot(plotted, file.exists(project_path(plot_file)))
+})
+regime_cases <- data.frame(
+  country = c("Ireland", "Denmark", "Estonia", "Austria", "Canada", "Finland"),
+  period_start = rep(2002L, 6), period_end = rep(2006L, 6)
+)
+typology <- data.frame(
+  Country = c("Canada", "Austria", "Denmark", "Finland", "Ireland"),
+  EA_Type = c("Liberal", "Conservative", "Socialist", "Hybrid1", "Hybrid2")
+)
+regime_cases <- suppressWarnings(
+  sort_middle_wealth_cases_by_regime(regime_cases, typology)
+)
+stopifnot(
+  identical(regime_cases$country,
+            c("Canada", "Austria", "Denmark", "Finland", "Ireland", "Estonia")),
+  identical(regime_cases$welfare_regime,
+            c("Liberal", "Conservative", "Socialist", "Hybrid1", "Hybrid2",
+              "Not classified"))
 )
 annual_pairs <- data.frame(
   country = "A", year = c(2008L, 2009L, 2010L),

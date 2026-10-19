@@ -1,0 +1,40 @@
+Country,ISO_Code,EA_Type,Liberalism_Rank,Conservatism_Rank,Socialism_Rank
+Australia,AU,Liberal,Low,Low,Medium
+Austria,AT,Conservative,Low,Medium,Low
+Belgium,BE,Conservative,Low,Medium,Medium
+Bulgaria,BG,Post-Communist,NA,NA,NA
+Croatia,HR,Post-Communist,NA,NA,NA
+Cyprus,CY,Southern European,NA,NA,NA
+Czechia,CZ,Post-Communist,NA,NA,NA
+Denmark,DK,Socialist,Low,Medium,Strong
+Estonia,EE,Post-Communist,NA,NA,NA
+Finland,FI,Hybrid1,Low,Strong,Strong
+France,FR,Conservative,Medium,Strong,Low
+Germany,DE,Conservative,Medium,Strong,Medium
+Greece,GR,Southern European,NA,NA,NA
+Hungary,HU,Post-Communist,NA,NA,NA
+Iceland,IS,Social Democratic,NA,NA,NA
+Ireland,IE,Hybrid2,Low,Low,Low
+Italy,IT,Conservative,Medium,Strong,Low
+Japan,JP,Liberal,Strong,Low,Low
+Kosovo,XK,Post-Communist,NA,NA,NA
+Latvia,LV,Post-Communist,NA,NA,NA
+Lithuania,LT,Post-Communist,NA,NA,NA
+Luxembourg,LU,Conservative,NA,NA,NA
+Montenegro,ME,Post-Communist,NA,NA,NA
+Netherlands,NL,Socialist,Medium,Medium,Strong
+New Zealand,NZ,Hybrid2,Low,Low,Medium
+Norway,NO,Socialist,Low,Medium,Strong
+Poland,PL,Post-Communist,NA,NA,NA
+Portugal,PT,Southern European,NA,NA,NA
+Romania,RO,Post-Communist,NA,NA,NA
+Serbia,RS,Post-Communist,NA,NA,NA
+Slovakia,SK,Post-Communist,NA,NA,NA
+Slovenia,SI,Post-Communist,NA,NA,NA
+Spain,ES,Southern European,NA,NA,NA
+Sweden,SE,Socialist,Low,Low,Strong
+Switzerland,CH,Liberal,Strong,Low,Medium
+Turkey,TR,Other/Non-EU,NA,NA,NA
+Ukraine,UA,Post-Communist,NA,NA,NA
+United Kingdom,GB,Hybrid2,Medium,Low,Medium
+United States,US,Liberal,Strong,Low,Low

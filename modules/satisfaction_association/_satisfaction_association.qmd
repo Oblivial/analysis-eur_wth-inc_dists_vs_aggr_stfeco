@@ -25,7 +25,8 @@ knitr::kable(analysis$association$variance, digits = 2, row.names = FALSE)
 
 ### Measure Selection
 
-The following selections apply to all correlation and variance tables in this section.
+The following selections apply to exploratory scatterplot selection and variance
+decomposition. The compact regime comparison below uses mean satisfaction only.
 
 ```{r}
 #| label: association-measure-selection
@@ -118,20 +119,38 @@ if ("selected_income" %in% names(analysis$association$plot_files)) {
 }
 ```
 
-### Correlations
+### Middle-40% Wealth and Mean Satisfaction by Welfare Regime
 
-Satisfaction-only tables describe redundancy among survey summaries. Income and
-wealth tables compare satisfaction measures against one distribution domain at a
-time; distribution measures are not correlated with one another. Each coefficient
-uses the available observations for that pair of measures.
+This compact table examines only **middle-40% wealth share (WID)** versus
+**mean economic satisfaction (ESS)**. Same-source correlations and the full
+correlation matrices are omitted. Welfare regime and Post-Communist status are
+shown together, using the fixed country labels in `esping_typology_simple.csv`;
+the extended labels are not all original Esping-Andersen categories.
+
+The Post-Communist regime row also supplies the Post-Communist aggregate.
+The final row pools all other classified regimes for comparison, without
+repeating the Post-Communist result. Unknown classifications remain separate,
+not assumed non-Post-Communist. The aggregate rows overlap the regime rows
+and are not additional independent samples.
+
+Coefficients use finite pairs from reliable country-rounds; fewer than three
+pairs or a constant measure produces an unavailable coefficient. Empty
+categories remain visible. These pooled correlations mix country differences
+and changes over time, and countries with more rounds contribute more pairs.
+A one-country category describes only that country's series. Differences
+between coefficients are descriptive, not significance tests or causal regime
+effects; the non-Post-Communist aggregate combines heterogeneous regimes.
 
 ```{r}
-#| label: association-correlation-tables
+#| label: association-focused-wealth-correlations
 #| echo: false
-#| results: asis
-for (section in analysis$association$report_tables) {
-  cat("\n\n#### ", section$title, "\n\n", sep = "")
-  print(knitr::kable(section$table, digits = 2, row.names = FALSE))
-  cat("\n\n")
-}
+knitr::kable(
+  analysis$association$focused_wealth_correlations[c(
+    "welfare_regime", "post_communist_status", "n", "countries",
+    "pearson", "spearman", "status"
+  )],
+  col.names = c("Welfare regime / sample", "Post-Communist status", "Paired rounds",
+                "Countries", "Pearson", "Spearman", "Availability"),
+  digits = 2, row.names = FALSE
+)
 ```

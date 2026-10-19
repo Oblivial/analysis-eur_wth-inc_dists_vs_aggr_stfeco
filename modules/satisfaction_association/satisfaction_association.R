@@ -130,6 +130,66 @@ compute_association_correlations <- function(reliable, measures = define_associa
   tables
 }
 
+compute_wealth_regime_correlations <- function(
+    reliable, measures = define_association_measures(),
+    group_field = "welfare_regime", group_levels = welfare_regime_levels) {
+  rows <- list()
+  for (regime in group_levels) {
+    data <- reliable[reliable[[group_field]] == regime, , drop = FALSE]
+    for (distribution in names(measures$distributions$wealth)) {
+      for (satisfaction in names(measures$satisfaction)) {
+        keep <- is.finite(data[[distribution]]) & is.finite(data[[satisfaction]])
+        x <- data[[distribution]][keep]
+        y <- data[[satisfaction]][keep]
+        status <- if (length(x) < 3L) {
+          "Fewer than 3 pairs"
+        } else if (length(unique(x)) < 2L || length(unique(y)) < 2L) {
+          "Constant measure"
+        } else {
+          "Available"
+        }
+        rows[[length(rows) + 1L]] <- data.frame(
+          welfare_regime = regime,
+          distribution_label = measures$distributions$wealth[[distribution]],
+          satisfaction_label = measures$satisfaction[[satisfaction]],
+          n = length(x), countries = length(unique(data$country[keep])),
+          pearson = if (status == "Available") stats::cor(x, y) else NA_real_,
+          spearman = if (status == "Available") {
+            stats::cor(x, y, method = "spearman")
+          } else NA_real_,
+          status = status
+        )
+      }
+    }
+  }
+  result <- bind_rows(rows)
+  names(result)[names(result) == "welfare_regime"] <- group_field
+  result
+}
+
+compute_focused_wealth_correlations <- function(reliable) {
+  measures <- define_association_measures()
+  measures$satisfaction <- measures$satisfaction["ess_mean"]
+  measures$distributions$wealth <- measures$distributions$wealth["wealth_middle_40_share"]
+  regimes <- compute_wealth_regime_correlations(reliable, measures)
+  regimes$post_communist_status <- ifelse(
+    regimes$welfare_regime == "Not classified", "Not classified",
+    ifelse(regimes$welfare_regime == "Post-Communist", "Post-Communist", "Not Post-Communist")
+  )
+  overall <- reliable
+  overall$welfare_regime <- rep("All countries", nrow(overall))
+  overall <- compute_wealth_regime_correlations(
+    overall, measures, group_levels = "All countries"
+  )
+  overall$post_communist_status <- "All"
+  non_post <- compute_wealth_regime_correlations(
+    reliable, measures,
+    group_field = "post_communist_status", group_levels = "Not Post-Communist"
+  )
+  non_post$welfare_regime <- "All non-Post-Communist regimes"
+  bind_rows(list(overall, regimes, non_post[names(overall)]))
+}
+
 # Report between-country and within-country shares of each measure's total variation.
 compute_variance_decomposition <- function(reliable, measures = define_association_measures()) {
   # Split total variation into country means and deviations within each country.
@@ -298,7 +358,7 @@ select_association_scatters <- function(reliable, measures = define_association_
 
 # Build the country-round export, descriptive tables, and association figures.
 compute_satisfaction_association <- function(matching) {
-  panel <- build_country_round_table(matching)
+  panel <- attach_welfare_regimes(build_country_round_table(matching))
   table_file <- project_path(paths$association_table)
   dir.create(dirname(table_file), recursive = TRUE, showWarnings = FALSE)
   utils::write.csv(panel, table_file, row.names = FALSE, na = "")
@@ -328,7 +388,8 @@ compute_satisfaction_association <- function(matching) {
     list(
       panel = panel, variance = compute_variance_decomposition(reliable, measures),
       measure_selection = measures$selection,
-      selected_associations = selected_associations
+      selected_associations = selected_associations,
+      focused_wealth_correlations = compute_focused_wealth_correlations(reliable)
     ),
     compute_association_correlations(reliable, measures),
     list(
@@ -374,7 +435,7 @@ plot_selected_associations <- function(reliable, selected, relative_file) {
 run_satisfaction_association <- function(matching) {
   cached_result(
     "ess_wid_association",
-    input_files = raw_input_files(),
+    input_files = c(raw_input_files(), project_path(paths$esping_typology_csv)),
     code_files = code_files_for("matching", "validity", "association"),
     compute = function() compute_satisfaction_association(matching),
     output_files = function(result) c(result$table_file, unname(result$plot_files))

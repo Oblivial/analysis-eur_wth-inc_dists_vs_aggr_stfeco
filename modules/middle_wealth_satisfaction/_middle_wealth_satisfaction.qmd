@@ -74,15 +74,27 @@ the measures moved in opposite directions over that interval; matching signs mea
 they moved in the same direction. This is a description of concurrent country-level
 movement, not a causal effect or an individual-level relationship.
 
+The chart below compares each selected case's ESS mean change with its CWS CPI2 change
+over the same endpoints. CPI2 is reported as an index-point change, and cases without
+CPI2 observations at both endpoints are omitted from the chart.
+
+```{r}
+#| label: cpi2-satisfaction-change
+#| echo: false
+if ("cpi2_change" %in% names(analysis$middle_wealth$plot_files)) {
+  knitr::include_graphics(analysis$middle_wealth$plot_files[["cpi2_change"]])
+}
+```
+
 ```{r}
 #| label: middle-wealth-case-selection
 #| echo: false
 cases <- analysis$middle_wealth$cases
 if (nrow(cases)) {
   case_summary <- cases[c(
-    "country", "period_start", "period_end", "period_source",
-    "wealth_share_change_pp", "satisfaction_change_points", "same_year_pearson",
-    "same_year_n", "lag_pearson", "lag_n", "selection_reason"
+    "country", "welfare_regime", "period_start", "period_end", "period_source",
+    "wealth_share_change_pp", "satisfaction_change_points", "cpi2_change",
+    "same_year_pearson", "same_year_n", "lag_pearson", "lag_n", "selection_reason"
   )]
   case_summary$same_year <- sprintf(
     "%.2f (n=%d)", case_summary$same_year_pearson, case_summary$same_year_n
@@ -93,14 +105,16 @@ if (nrow(cases)) {
     sprintf("NA (n=%d)", case_summary$lag_n)
   )
   case_summary <- case_summary[c(
-    "country", "period_start", "period_end", "period_source", "wealth_share_change_pp",
-    "satisfaction_change_points", "same_year", "one_year_lag", "selection_reason"
+    "country", "welfare_regime", "period_start", "period_end", "period_source",
+    "wealth_share_change_pp", "satisfaction_change_points", "cpi2_change",
+    "same_year", "one_year_lag", "selection_reason"
   )]
   knitr::kable(
     case_summary,
-    col.names = c("Country", "Period start", "Period end", "Period basis",
+    col.names = c("Country", "Welfare regime", "Period start", "Period end", "Period basis",
                   "Wealth-share change (pp)", "Satisfaction change (points)",
-                  "Same-year Pearson (n)", "1-year lag Pearson (n)", "Selected for"),
+                  "CWS CPI2 change (index points)", "Same-year Pearson (n)",
+                  "1-year lag Pearson (n)", "Selected for"),
     digits = 2, row.names = FALSE
   )
 }

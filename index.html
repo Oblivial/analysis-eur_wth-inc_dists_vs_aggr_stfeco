@@ -66,7 +66,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#within-country-association" id="toc-within-country-association" class="nav-link" data-scroll-target="#within-country-association">Within-Country Association</a></li>
   <li><a href="#satisfaction-by-year" id="toc-satisfaction-by-year" class="nav-link" data-scroll-target="#satisfaction-by-year">Satisfaction by Year</a></li>
   <li><a href="#selected-correlation-scatterplots" id="toc-selected-correlation-scatterplots" class="nav-link" data-scroll-target="#selected-correlation-scatterplots">Selected Correlation Scatterplots</a></li>
-  <li><a href="#correlations" id="toc-correlations" class="nav-link" data-scroll-target="#correlations">Correlations</a></li>
+  <li><a href="#middle-40-wealth-and-mean-satisfaction-by-welfare-regime" id="toc-middle-40-wealth-and-mean-satisfaction-by-welfare-regime" class="nav-link" data-scroll-target="#middle-40-wealth-and-mean-satisfaction-by-welfare-regime">Middle-40% Wealth and Mean Satisfaction by Welfare Regime</a></li>
   </ul></li>
   <li><a href="#income-and-wealth-distribution-change" id="toc-income-and-wealth-distribution-change" class="nav-link" data-scroll-target="#income-and-wealth-distribution-change">Income and Wealth Distribution Change</a>
   <ul class="collapse">
@@ -82,15 +82,15 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#country-screening" id="toc-country-screening" class="nav-link" data-scroll-target="#country-screening">Country Screening</a></li>
   <li><a href="#selected-cases" id="toc-selected-cases" class="nav-link" data-scroll-target="#selected-cases">Selected Cases</a></li>
-  <li><a href="#germany-2009-2012" id="toc-germany-2009-2012" class="nav-link" data-scroll-target="#germany-2009-2012">Germany: 2009-2012</a></li>
-  <li><a href="#estonia-2004-2007" id="toc-estonia-2004-2007" class="nav-link" data-scroll-target="#estonia-2004-2007">Estonia: 2004-2007</a></li>
-  <li><a href="#ireland-2009-2015" id="toc-ireland-2009-2015" class="nav-link" data-scroll-target="#ireland-2009-2015">Ireland: 2009-2015</a></li>
-  <li><a href="#slovakia-2009-2012" id="toc-slovakia-2009-2012" class="nav-link" data-scroll-target="#slovakia-2009-2012">Slovakia: 2009-2012</a></li>
-  <li><a href="#sweden-2010-2014" id="toc-sweden-2010-2014" class="nav-link" data-scroll-target="#sweden-2010-2014">Sweden: 2010-2014</a></li>
-  <li><a href="#portugal-2004-2007" id="toc-portugal-2004-2007" class="nav-link" data-scroll-target="#portugal-2004-2007">Portugal: 2004-2007</a></li>
   <li><a href="#belgium-2009-2012" id="toc-belgium-2009-2012" class="nav-link" data-scroll-target="#belgium-2009-2012">Belgium: 2009-2012</a></li>
-  <li><a href="#germany-2003-2006" id="toc-germany-2003-2006" class="nav-link" data-scroll-target="#germany-2003-2006">Germany: 2003-2006</a></li>
   <li><a href="#france-2003-2007" id="toc-france-2003-2007" class="nav-link" data-scroll-target="#france-2003-2007">France: 2003-2007</a></li>
+  <li><a href="#germany-2003-2006" id="toc-germany-2003-2006" class="nav-link" data-scroll-target="#germany-2003-2006">Germany: 2003-2006</a></li>
+  <li><a href="#germany-2009-2012" id="toc-germany-2009-2012" class="nav-link" data-scroll-target="#germany-2009-2012">Germany: 2009-2012</a></li>
+  <li><a href="#sweden-2010-2014" id="toc-sweden-2010-2014" class="nav-link" data-scroll-target="#sweden-2010-2014">Sweden: 2010-2014</a></li>
+  <li><a href="#ireland-2009-2015" id="toc-ireland-2009-2015" class="nav-link" data-scroll-target="#ireland-2009-2015">Ireland: 2009-2015</a></li>
+  <li><a href="#estonia-2004-2007" id="toc-estonia-2004-2007" class="nav-link" data-scroll-target="#estonia-2004-2007">Estonia: 2004-2007</a></li>
+  <li><a href="#slovakia-2009-2012" id="toc-slovakia-2009-2012" class="nav-link" data-scroll-target="#slovakia-2009-2012">Slovakia: 2009-2012</a></li>
+  <li><a href="#portugal-2004-2007" id="toc-portugal-2004-2007" class="nav-link" data-scroll-target="#portugal-2004-2007">Portugal: 2004-2007</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -346,7 +346,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="measure-selection" class="level3">
 <h3 class="anchored" data-anchor-id="measure-selection">Measure Selection</h3>
-<p>The following selections apply to all correlation and variance tables in this section.</p>
+<p>The following selections apply to exploratory scatterplot selection and variance decomposition. The compact regime comparison below uses mean satisfaction only.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="caption-top table table-sm table-striped small">
@@ -535,399 +535,147 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </section>
 </section>
-<section id="correlations" class="level3">
-<h3 class="anchored" data-anchor-id="correlations">Correlations</h3>
-<p>Satisfaction-only tables describe redundancy among survey summaries. Income and wealth tables compare satisfaction measures against one distribution domain at a time; distribution measures are not correlated with one another. Each coefficient uses the available observations for that pair of measures.</p>
-<section id="pearson-satisfaction" class="level4">
-<h4 class="anchored" data-anchor-id="pearson-satisfaction">Pearson: Satisfaction</h4>
-<table class="caption-top table">
+<section id="middle-40-wealth-and-mean-satisfaction-by-welfare-regime" class="level3">
+<h3 class="anchored" data-anchor-id="middle-40-wealth-and-mean-satisfaction-by-welfare-regime">Middle-40% Wealth and Mean Satisfaction by Welfare Regime</h3>
+<p>This compact table examines only <strong>middle-40% wealth share (WID)</strong> versus <strong>mean economic satisfaction (ESS)</strong>. Same-source correlations and the full correlation matrices are omitted. Welfare regime and Post-Communist status are shown together, using the fixed country labels in <code>esping_typology_simple.csv</code>; the extended labels are not all original Esping-Andersen categories.</p>
+<p>The Post-Communist regime row also supplies the Post-Communist aggregate. The final row pools all other classified regimes for comparison, without repeating the Post-Communist result. Unknown classifications remain separate, not assumed non-Post-Communist. The aggregate rows overlap the regime rows and are not additional independent samples.</p>
+<p>Coefficients use finite pairs from reliable country-rounds; fewer than three pairs or a constant measure produces an unavailable coefficient. Empty categories remain visible. These pooled correlations mix country differences and changes over time, and countries with more rounds contribute more pairs. A one-country category describes only that country’s series. Differences between coefficients are descriptive, not significance tests or causal regime effects; the non-Post-Communist aggregate combines heterogeneous regimes.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
 <colgroup>
-<col style="width: 24%">
-<col style="width: 13%">
-<col style="width: 24%">
+<col style="width: 27%">
+<col style="width: 19%">
 <col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
+<col style="width: 8%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 16%">
 </colgroup>
 <thead>
 <tr class="header">
-<th style="text-align: left;">measure</th>
-<th style="text-align: right;">Satisfaction mean</th>
-<th style="text-align: right;">Satisfaction standard deviation</th>
-<th style="text-align: right;">Satisfaction p10</th>
-<th style="text-align: right;">Satisfaction p90</th>
-<th style="text-align: right;">Satisfaction IQR</th>
+<th style="text-align: left;">Welfare regime / sample</th>
+<th style="text-align: left;">Post-Communist status</th>
+<th style="text-align: right;">Paired rounds</th>
+<th style="text-align: right;">Countries</th>
+<th style="text-align: right;">Pearson</th>
+<th style="text-align: right;">Spearman</th>
+<th style="text-align: left;">Availability</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Satisfaction mean</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-0.21</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">0.94</td>
-<td style="text-align: right;">-0.34</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction standard deviation</td>
-<td style="text-align: right;">-0.21</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-0.39</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.65</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction p10</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">-0.39</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.87</td>
-<td style="text-align: right;">-0.42</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction p90</td>
-<td style="text-align: right;">0.94</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.87</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-0.19</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction IQR</td>
-<td style="text-align: right;">-0.34</td>
-<td style="text-align: right;">0.65</td>
-<td style="text-align: right;">-0.42</td>
-<td style="text-align: right;">-0.19</td>
-<td style="text-align: right;">1.00</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="pearson-wealth" class="level4">
-<h4 class="anchored" data-anchor-id="pearson-wealth">Pearson: Wealth</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 17%">
-<col style="width: 17%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">measure</th>
-<th style="text-align: right;">Wealth decile Gini</th>
-<th style="text-align: right;">Wealth Palma ratio</th>
-<th style="text-align: right;">Wealth middle 40% share</th>
-<th style="text-align: right;">Wealth bottom 50% share</th>
-<th style="text-align: right;">Wealth top 10% share</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction mean</td>
-<td style="text-align: right;">0.12</td>
-<td style="text-align: right;">0.04</td>
+<td style="text-align: left;">All countries</td>
+<td style="text-align: left;">All</td>
+<td style="text-align: right;">185</td>
+<td style="text-align: right;">32</td>
 <td style="text-align: right;">0.21</td>
-<td style="text-align: right;">-0.20</td>
-<td style="text-align: right;">0.01</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction standard deviation</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">-0.24</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.13</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction p10</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.04</td>
 <td style="text-align: right;">0.22</td>
-<td style="text-align: right;">-0.18</td>
-<td style="text-align: right;">-0.01</td>
+<td style="text-align: left;">Available</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Satisfaction p90</td>
-<td style="text-align: right;">0.11</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.15</td>
-<td style="text-align: right;">-0.17</td>
-<td style="text-align: right;">0.02</td>
+<td style="text-align: left;">Liberal</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-0.77</td>
+<td style="text-align: right;">-0.86</td>
+<td style="text-align: left;">Available</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Satisfaction IQR</td>
-<td style="text-align: right;">-0.04</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">-0.22</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.07</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="pearson-income" class="level4">
-<h4 class="anchored" data-anchor-id="pearson-income">Pearson: Income</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 17%">
-<col style="width: 17%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">measure</th>
-<th style="text-align: right;">Income decile Gini</th>
-<th style="text-align: right;">Income Palma ratio</th>
-<th style="text-align: right;">Income middle 40% share</th>
-<th style="text-align: right;">Income bottom 50% share</th>
-<th style="text-align: right;">Income top 10% share</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction mean</td>
-<td style="text-align: right;">-0.43</td>
-<td style="text-align: right;">-0.36</td>
-<td style="text-align: right;">-0.01</td>
-<td style="text-align: right;">0.44</td>
-<td style="text-align: right;">-0.38</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction standard deviation</td>
-<td style="text-align: right;">0.32</td>
-<td style="text-align: right;">0.36</td>
-<td style="text-align: right;">-0.14</td>
-<td style="text-align: right;">-0.32</td>
-<td style="text-align: right;">0.34</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction p10</td>
-<td style="text-align: right;">-0.42</td>
-<td style="text-align: right;">-0.36</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.43</td>
-<td style="text-align: right;">-0.38</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction p90</td>
-<td style="text-align: right;">-0.35</td>
-<td style="text-align: right;">-0.27</td>
-<td style="text-align: right;">-0.04</td>
-<td style="text-align: right;">0.36</td>
-<td style="text-align: right;">-0.30</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction IQR</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: right;">0.31</td>
-<td style="text-align: right;">-0.07</td>
-<td style="text-align: right;">-0.31</td>
-<td style="text-align: right;">0.30</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="spearman-satisfaction" class="level4">
-<h4 class="anchored" data-anchor-id="spearman-satisfaction">Spearman: Satisfaction</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 24%">
-<col style="width: 13%">
-<col style="width: 24%">
-<col style="width: 12%">
-<col style="width: 12%">
-<col style="width: 12%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">measure</th>
-<th style="text-align: right;">Satisfaction mean</th>
-<th style="text-align: right;">Satisfaction standard deviation</th>
-<th style="text-align: right;">Satisfaction p10</th>
-<th style="text-align: right;">Satisfaction p90</th>
-<th style="text-align: right;">Satisfaction IQR</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction mean</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-0.16</td>
-<td style="text-align: right;">0.96</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">-0.32</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction standard deviation</td>
-<td style="text-align: right;">-0.16</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-0.31</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.59</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction p10</td>
-<td style="text-align: right;">0.96</td>
-<td style="text-align: right;">-0.31</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">0.89</td>
-<td style="text-align: right;">-0.39</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction p90</td>
-<td style="text-align: right;">0.95</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.89</td>
-<td style="text-align: right;">1.00</td>
-<td style="text-align: right;">-0.20</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction IQR</td>
-<td style="text-align: right;">-0.32</td>
-<td style="text-align: right;">0.59</td>
-<td style="text-align: right;">-0.39</td>
-<td style="text-align: right;">-0.20</td>
-<td style="text-align: right;">1.00</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="spearman-wealth" class="level4">
-<h4 class="anchored" data-anchor-id="spearman-wealth">Spearman: Wealth</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 17%">
-<col style="width: 17%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">measure</th>
-<th style="text-align: right;">Wealth decile Gini</th>
-<th style="text-align: right;">Wealth Palma ratio</th>
-<th style="text-align: right;">Wealth middle 40% share</th>
-<th style="text-align: right;">Wealth bottom 50% share</th>
-<th style="text-align: right;">Wealth top 10% share</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction mean</td>
-<td style="text-align: right;">0.08</td>
-<td style="text-align: right;">-0.12</td>
-<td style="text-align: right;">0.22</td>
-<td style="text-align: right;">-0.20</td>
-<td style="text-align: right;">-0.01</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction standard deviation</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">-0.20</td>
-<td style="text-align: right;">0.01</td>
-<td style="text-align: right;">0.13</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction p10</td>
-<td style="text-align: right;">0.07</td>
-<td style="text-align: right;">-0.12</td>
-<td style="text-align: right;">0.23</td>
-<td style="text-align: right;">-0.19</td>
+<td style="text-align: left;">Conservative</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">-0.08</td>
 <td style="text-align: right;">-0.03</td>
+<td style="text-align: left;">Available</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Satisfaction p90</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">-0.07</td>
-<td style="text-align: right;">0.18</td>
-<td style="text-align: right;">-0.20</td>
-<td style="text-align: right;">0.02</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction IQR</td>
-<td style="text-align: right;">-0.03</td>
-<td style="text-align: right;">0.06</td>
-<td style="text-align: right;">-0.23</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.09</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="spearman-income" class="level4">
-<h4 class="anchored" data-anchor-id="spearman-income">Spearman: Income</h4>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 23%">
-<col style="width: 13%">
-<col style="width: 13%">
-<col style="width: 17%">
-<col style="width: 17%">
-<col style="width: 15%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;">measure</th>
-<th style="text-align: right;">Income decile Gini</th>
-<th style="text-align: right;">Income Palma ratio</th>
-<th style="text-align: right;">Income middle 40% share</th>
-<th style="text-align: right;">Income bottom 50% share</th>
-<th style="text-align: right;">Income top 10% share</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction mean</td>
-<td style="text-align: right;">-0.43</td>
-<td style="text-align: right;">-0.42</td>
-<td style="text-align: right;">-0.06</td>
-<td style="text-align: right;">0.43</td>
-<td style="text-align: right;">-0.40</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction standard deviation</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">-0.05</td>
-<td style="text-align: right;">-0.33</td>
-<td style="text-align: right;">0.34</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Satisfaction p10</td>
-<td style="text-align: right;">-0.41</td>
-<td style="text-align: right;">-0.40</td>
-<td style="text-align: right;">-0.06</td>
-<td style="text-align: right;">0.42</td>
-<td style="text-align: right;">-0.39</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Satisfaction p90</td>
-<td style="text-align: right;">-0.36</td>
-<td style="text-align: right;">-0.35</td>
-<td style="text-align: right;">-0.06</td>
+<td style="text-align: left;">Socialist</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">3</td>
 <td style="text-align: right;">0.37</td>
-<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">0.36</td>
+<td style="text-align: left;">Available</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">Satisfaction IQR</td>
+<td style="text-align: left;">Hybrid1</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-0.14</td>
+<td style="text-align: right;">-0.47</td>
+<td style="text-align: left;">Available</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Hybrid2</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.05</td>
+<td style="text-align: right;">0.01</td>
+<td style="text-align: left;">Available</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Post-Communist</td>
+<td style="text-align: left;">Post-Communist</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">-0.09</td>
+<td style="text-align: right;">-0.12</td>
+<td style="text-align: left;">Available</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Southern European</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">-0.28</td>
+<td style="text-align: right;">-0.15</td>
+<td style="text-align: left;">Available</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Social Democratic</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Fewer than 3 pairs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Other/Non-EU</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Fewer than 3 pairs</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Not classified</td>
+<td style="text-align: left;">Not classified</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: left;">Fewer than 3 pairs</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">All non-Post-Communist regimes</td>
+<td style="text-align: left;">Not Post-Communist</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">0.26</td>
 <td style="text-align: right;">0.29</td>
-<td style="text-align: right;">0.29</td>
-<td style="text-align: right;">0.03</td>
-<td style="text-align: right;">-0.30</td>
-<td style="text-align: right;">0.29</td>
+<td style="text-align: left;">Available</td>
 </tr>
 </tbody>
 </table>
-</section>
+</div>
+</div>
 </section>
 </section>
 <section id="income-and-wealth-distribution-change" class="level2">
@@ -1065,18 +813,20 @@ ul.task-list li input[type="checkbox"] {
 <table class="caption-top table table-sm table-striped small">
 <colgroup>
 <col style="width: 4%">
-<col style="width: 6%">
+<col style="width: 8%">
 <col style="width: 5%">
-<col style="width: 20%">
-<col style="width: 12%">
-<col style="width: 14%">
-<col style="width: 10%">
+<col style="width: 4%">
+<col style="width: 18%">
 <col style="width: 11%">
-<col style="width: 15%">
+<col style="width: 13%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 13%">
 </colgroup>
 <thead>
 <tr class="header">
 <th style="text-align: left;">Country</th>
+<th style="text-align: left;">Welfare regime</th>
 <th style="text-align: right;">Period start</th>
 <th style="text-align: right;">Period end</th>
 <th style="text-align: left;">Period basis</th>
@@ -1089,73 +839,8 @@ ul.task-list li input[type="checkbox"] {
 </thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;">Germany</td>
-<td style="text-align: right;">2009</td>
-<td style="text-align: right;">2012</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">0.78</td>
-<td style="text-align: right;">1.78</td>
-<td style="text-align: left;">1.00 (n=3)</td>
-<td style="text-align: left;">0.94 (n=3)</td>
-<td style="text-align: left;">Strongest positive association</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Estonia</td>
-<td style="text-align: right;">2004</td>
-<td style="text-align: right;">2007</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">0.22</td>
-<td style="text-align: right;">1.14</td>
-<td style="text-align: left;">0.98 (n=3)</td>
-<td style="text-align: left;">-0.18 (n=3)</td>
-<td style="text-align: left;">Strongest positive association</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Ireland</td>
-<td style="text-align: right;">2009</td>
-<td style="text-align: right;">2015</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">0.04</td>
-<td style="text-align: right;">2.08</td>
-<td style="text-align: left;">0.91 (n=6)</td>
-<td style="text-align: left;">0.05 (n=6)</td>
-<td style="text-align: left;">Strongest positive association</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Slovakia</td>
-<td style="text-align: right;">2009</td>
-<td style="text-align: right;">2012</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">-0.19</td>
-<td style="text-align: right;">-1.49</td>
-<td style="text-align: left;">0.85 (n=3)</td>
-<td style="text-align: left;">-0.80 (n=3)</td>
-<td style="text-align: left;">Strongest positive association</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">Sweden</td>
-<td style="text-align: right;">2010</td>
-<td style="text-align: right;">2014</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">-0.83</td>
-<td style="text-align: right;">-0.28</td>
-<td style="text-align: left;">0.72 (n=4)</td>
-<td style="text-align: left;">-0.18 (n=4)</td>
-<td style="text-align: left;">Strongest positive association</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">Portugal</td>
-<td style="text-align: right;">2004</td>
-<td style="text-align: right;">2007</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">0.00</td>
-<td style="text-align: right;">0.51</td>
-<td style="text-align: left;">-1.00 (n=3)</td>
-<td style="text-align: left;">0.58 (n=3)</td>
-<td style="text-align: left;">Strongest negative association</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">Belgium</td>
+<td style="text-align: left;">Conservative</td>
 <td style="text-align: right;">2009</td>
 <td style="text-align: right;">2012</td>
 <td style="text-align: left;">Complete consecutive valid annual period</td>
@@ -1166,18 +851,8 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">Strongest negative association</td>
 </tr>
 <tr class="even">
-<td style="text-align: left;">Germany</td>
-<td style="text-align: right;">2003</td>
-<td style="text-align: right;">2006</td>
-<td style="text-align: left;">Complete consecutive valid annual period</td>
-<td style="text-align: right;">-1.41</td>
-<td style="text-align: right;">1.27</td>
-<td style="text-align: left;">-0.89 (n=3)</td>
-<td style="text-align: left;">-0.94 (n=3)</td>
-<td style="text-align: left;">Strongest negative association</td>
-</tr>
-<tr class="odd">
 <td style="text-align: left;">France</td>
+<td style="text-align: left;">Conservative</td>
 <td style="text-align: right;">2003</td>
 <td style="text-align: right;">2007</td>
 <td style="text-align: left;">Complete consecutive valid annual period</td>
@@ -1187,11 +862,119 @@ ul.task-list li input[type="checkbox"] {
 <td style="text-align: left;">-0.77 (n=4)</td>
 <td style="text-align: left;">Strongest negative association</td>
 </tr>
+<tr class="odd">
+<td style="text-align: left;">Germany</td>
+<td style="text-align: left;">Conservative</td>
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">2006</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">-1.41</td>
+<td style="text-align: right;">1.27</td>
+<td style="text-align: left;">-0.89 (n=3)</td>
+<td style="text-align: left;">-0.94 (n=3)</td>
+<td style="text-align: left;">Strongest negative association</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Germany</td>
+<td style="text-align: left;">Conservative</td>
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">2012</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">0.78</td>
+<td style="text-align: right;">1.78</td>
+<td style="text-align: left;">1.00 (n=3)</td>
+<td style="text-align: left;">0.94 (n=3)</td>
+<td style="text-align: left;">Strongest positive association</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sweden</td>
+<td style="text-align: left;">Socialist</td>
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">2014</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">-0.83</td>
+<td style="text-align: right;">-0.28</td>
+<td style="text-align: left;">0.72 (n=4)</td>
+<td style="text-align: left;">-0.18 (n=4)</td>
+<td style="text-align: left;">Strongest positive association</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ireland</td>
+<td style="text-align: left;">Hybrid2</td>
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">2015</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">0.04</td>
+<td style="text-align: right;">2.08</td>
+<td style="text-align: left;">0.91 (n=6)</td>
+<td style="text-align: left;">0.05 (n=6)</td>
+<td style="text-align: left;">Strongest positive association</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Estonia</td>
+<td style="text-align: left;">Post-Communist</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">2007</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: right;">1.14</td>
+<td style="text-align: left;">0.98 (n=3)</td>
+<td style="text-align: left;">-0.18 (n=3)</td>
+<td style="text-align: left;">Strongest positive association</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Slovakia</td>
+<td style="text-align: left;">Post-Communist</td>
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">2012</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">-0.19</td>
+<td style="text-align: right;">-1.49</td>
+<td style="text-align: left;">0.85 (n=3)</td>
+<td style="text-align: left;">-0.80 (n=3)</td>
+<td style="text-align: left;">Strongest positive association</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Portugal</td>
+<td style="text-align: left;">Southern European</td>
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">2007</td>
+<td style="text-align: left;">Complete consecutive valid annual period</td>
+<td style="text-align: right;">0.00</td>
+<td style="text-align: right;">0.51</td>
+<td style="text-align: left;">-1.00 (n=3)</td>
+<td style="text-align: left;">0.58 (n=3)</td>
+<td style="text-align: left;">Strongest negative association</td>
+</tr>
 </tbody>
 </table>
 </div>
 </div>
 <p>Each case description interprets the interval changes before its year-labelled wealth-satisfaction comparison and two aligned time-series panels in their original units. Lines connect adjacent observed calendar years only; gaps remain unconnected. Orange triangles are the one-year-lag pairs. Dotted year markers identify the case interval endpoints in the time-series panels. Change magnitudes use the actual year gap, including gaps spanning missing rounds; they do not locate when movement occurred within the interval. Wealth-share and satisfaction axes are separate, so apparent co-movement is not imposed by choosing a dual-axis scale.</p>
+</section>
+<section id="belgium-2009-2012" class="level3">
+<h3 class="anchored" data-anchor-id="belgium-2009-2012">Belgium: 2009-2012</h3>
+<p>Strongest negative association. 4 valid annual observations from 2009 to 2012.</p>
+<p>Same-year Pearson r = -0.95; one-year-lag Pearson r = -0.66, using 3 paired years. From 2009 to 2012, the middle-40% wealth share increased by 1.34 percentage points, while mean economic satisfaction increased by 0.73 scale points.</p>
+<p>Same-year Pearson -0.95; lagged Pearson -0.66. The association retains its direction but is weaker with the one-year lag. Only 3 paired years: exploratory.</p>
+<p>Spearman: same-year -1.00; one-year lag -0.50.</p>
+<p><img src="figures/middle_wealth_satisfaction/case_01.png" class="img-fluid"></p>
+</section>
+<section id="france-2003-2007" class="level3">
+<h3 class="anchored" data-anchor-id="france-2003-2007">France: 2003-2007</h3>
+<p>Strongest negative association. 5 valid annual observations from 2003 to 2007.</p>
+<p>Same-year Pearson r = -0.75; one-year-lag Pearson r = -0.77, using 4 paired years. From 2003 to 2007, the middle-40% wealth share increased by 1.00 percentage points, while mean economic satisfaction increased by 0.32 scale points.</p>
+<p>Same-year Pearson -0.75; lagged Pearson -0.77. The association retains its direction and is at least as strong with the lag. Only 4 paired years: exploratory.</p>
+<p>Spearman: same-year -0.80; one-year lag -0.80.</p>
+<p><img src="figures/middle_wealth_satisfaction/case_02.png" class="img-fluid"></p>
+</section>
+<section id="germany-2003-2006" class="level3">
+<h3 class="anchored" data-anchor-id="germany-2003-2006">Germany: 2003-2006</h3>
+<p>Strongest negative association. 4 valid annual observations from 2003 to 2006.</p>
+<p>Same-year Pearson r = -0.89; one-year-lag Pearson r = -0.94, using 3 paired years. From 2003 to 2006, the middle-40% wealth share decreased by 1.41 percentage points, while mean economic satisfaction increased by 1.27 scale points.</p>
+<p>Same-year Pearson -0.89; lagged Pearson -0.94. The association retains its direction and is at least as strong with the lag. Only 3 paired years: exploratory.</p>
+<p>Spearman: same-year -1.00; one-year lag -1.00.</p>
+<p><img src="figures/middle_wealth_satisfaction/case_03.png" class="img-fluid"></p>
 </section>
 <section id="germany-2009-2012" class="level3">
 <h3 class="anchored" data-anchor-id="germany-2009-2012">Germany: 2009-2012</h3>
@@ -1199,30 +982,6 @@ ul.task-list li input[type="checkbox"] {
 <p>Same-year Pearson r = 1.00; one-year-lag Pearson r = 0.94, using 3 paired years. From 2009 to 2012, the middle-40% wealth share increased by 0.78 percentage points, while mean economic satisfaction increased by 1.78 scale points.</p>
 <p>Same-year Pearson 1.00; lagged Pearson 0.94. The association retains its direction but is weaker with the one-year lag. Only 3 paired years: exploratory.</p>
 <p>Spearman: same-year 1.00; one-year lag 1.00.</p>
-<p><img src="figures/middle_wealth_satisfaction/case_01.png" class="img-fluid"></p>
-</section>
-<section id="estonia-2004-2007" class="level3">
-<h3 class="anchored" data-anchor-id="estonia-2004-2007">Estonia: 2004-2007</h3>
-<p>Strongest positive association. 4 valid annual observations from 2004 to 2007.</p>
-<p>Same-year Pearson r = 0.98; one-year-lag Pearson r = -0.18, using 3 paired years. From 2004 to 2007, the middle-40% wealth share increased by 0.22 percentage points, while mean economic satisfaction increased by 1.14 scale points.</p>
-<p>Same-year Pearson 0.98; lagged Pearson -0.18. The association reverses direction with the one-year lag. Only 3 paired years: exploratory.</p>
-<p>Spearman: same-year 1.00; one-year lag 0.50.</p>
-<p><img src="figures/middle_wealth_satisfaction/case_02.png" class="img-fluid"></p>
-</section>
-<section id="ireland-2009-2015" class="level3">
-<h3 class="anchored" data-anchor-id="ireland-2009-2015">Ireland: 2009-2015</h3>
-<p>Strongest positive association. 7 valid annual observations from 2009 to 2015.</p>
-<p>Same-year Pearson r = 0.91; one-year-lag Pearson r = 0.05, using 6 paired years. From 2009 to 2015, the middle-40% wealth share increased by 0.04 percentage points, while mean economic satisfaction increased by 2.08 scale points.</p>
-<p>Same-year Pearson 0.91; lagged Pearson 0.05. The association retains its direction but is weaker with the one-year lag. Only 6 paired years: exploratory.</p>
-<p>Spearman: same-year 0.66; one-year lag -0.03.</p>
-<p><img src="figures/middle_wealth_satisfaction/case_03.png" class="img-fluid"></p>
-</section>
-<section id="slovakia-2009-2012" class="level3">
-<h3 class="anchored" data-anchor-id="slovakia-2009-2012">Slovakia: 2009-2012</h3>
-<p>Strongest positive association. 4 valid annual observations from 2009 to 2012.</p>
-<p>Same-year Pearson r = 0.85; one-year-lag Pearson r = -0.80, using 3 paired years. From 2009 to 2012, the middle-40% wealth share decreased by 0.19 percentage points, while mean economic satisfaction decreased by 1.49 scale points.</p>
-<p>Same-year Pearson 0.85; lagged Pearson -0.80. The association reverses direction with the one-year lag. Only 3 paired years: exploratory.</p>
-<p>Spearman: same-year 1.00; one-year lag -0.50.</p>
 <p><img src="figures/middle_wealth_satisfaction/case_04.png" class="img-fluid"></p>
 </section>
 <section id="sweden-2010-2014" class="level3">
@@ -1233,36 +992,36 @@ ul.task-list li input[type="checkbox"] {
 <p>Spearman: same-year 0.40; one-year lag -0.60.</p>
 <p><img src="figures/middle_wealth_satisfaction/case_05.png" class="img-fluid"></p>
 </section>
+<section id="ireland-2009-2015" class="level3">
+<h3 class="anchored" data-anchor-id="ireland-2009-2015">Ireland: 2009-2015</h3>
+<p>Strongest positive association. 7 valid annual observations from 2009 to 2015.</p>
+<p>Same-year Pearson r = 0.91; one-year-lag Pearson r = 0.05, using 6 paired years. From 2009 to 2015, the middle-40% wealth share increased by 0.04 percentage points, while mean economic satisfaction increased by 2.08 scale points.</p>
+<p>Same-year Pearson 0.91; lagged Pearson 0.05. The association retains its direction but is weaker with the one-year lag. Only 6 paired years: exploratory.</p>
+<p>Spearman: same-year 0.66; one-year lag -0.03.</p>
+<p><img src="figures/middle_wealth_satisfaction/case_06.png" class="img-fluid"></p>
+</section>
+<section id="estonia-2004-2007" class="level3">
+<h3 class="anchored" data-anchor-id="estonia-2004-2007">Estonia: 2004-2007</h3>
+<p>Strongest positive association. 4 valid annual observations from 2004 to 2007.</p>
+<p>Same-year Pearson r = 0.98; one-year-lag Pearson r = -0.18, using 3 paired years. From 2004 to 2007, the middle-40% wealth share increased by 0.22 percentage points, while mean economic satisfaction increased by 1.14 scale points.</p>
+<p>Same-year Pearson 0.98; lagged Pearson -0.18. The association reverses direction with the one-year lag. Only 3 paired years: exploratory.</p>
+<p>Spearman: same-year 1.00; one-year lag 0.50.</p>
+<p><img src="figures/middle_wealth_satisfaction/case_07.png" class="img-fluid"></p>
+</section>
+<section id="slovakia-2009-2012" class="level3">
+<h3 class="anchored" data-anchor-id="slovakia-2009-2012">Slovakia: 2009-2012</h3>
+<p>Strongest positive association. 4 valid annual observations from 2009 to 2012.</p>
+<p>Same-year Pearson r = 0.85; one-year-lag Pearson r = -0.80, using 3 paired years. From 2009 to 2012, the middle-40% wealth share decreased by 0.19 percentage points, while mean economic satisfaction decreased by 1.49 scale points.</p>
+<p>Same-year Pearson 0.85; lagged Pearson -0.80. The association reverses direction with the one-year lag. Only 3 paired years: exploratory.</p>
+<p>Spearman: same-year 1.00; one-year lag -0.50.</p>
+<p><img src="figures/middle_wealth_satisfaction/case_08.png" class="img-fluid"></p>
+</section>
 <section id="portugal-2004-2007" class="level3">
 <h3 class="anchored" data-anchor-id="portugal-2004-2007">Portugal: 2004-2007</h3>
 <p>Strongest negative association. 4 valid annual observations from 2004 to 2007.</p>
 <p>Same-year Pearson r = -1.00; one-year-lag Pearson r = 0.58, using 3 paired years. From 2004 to 2007, the middle-40% wealth share was unchanged by 0.00 percentage points, while mean economic satisfaction increased by 0.51 scale points.</p>
 <p>Same-year Pearson -1.00; lagged Pearson 0.58. The association reverses direction with the one-year lag. Only 3 paired years: exploratory.</p>
 <p>Spearman: same-year -0.87; one-year lag 0.87.</p>
-<p><img src="figures/middle_wealth_satisfaction/case_06.png" class="img-fluid"></p>
-</section>
-<section id="belgium-2009-2012" class="level3">
-<h3 class="anchored" data-anchor-id="belgium-2009-2012">Belgium: 2009-2012</h3>
-<p>Strongest negative association. 4 valid annual observations from 2009 to 2012.</p>
-<p>Same-year Pearson r = -0.95; one-year-lag Pearson r = -0.66, using 3 paired years. From 2009 to 2012, the middle-40% wealth share increased by 1.34 percentage points, while mean economic satisfaction increased by 0.73 scale points.</p>
-<p>Same-year Pearson -0.95; lagged Pearson -0.66. The association retains its direction but is weaker with the one-year lag. Only 3 paired years: exploratory.</p>
-<p>Spearman: same-year -1.00; one-year lag -0.50.</p>
-<p><img src="figures/middle_wealth_satisfaction/case_07.png" class="img-fluid"></p>
-</section>
-<section id="germany-2003-2006" class="level3">
-<h3 class="anchored" data-anchor-id="germany-2003-2006">Germany: 2003-2006</h3>
-<p>Strongest negative association. 4 valid annual observations from 2003 to 2006.</p>
-<p>Same-year Pearson r = -0.89; one-year-lag Pearson r = -0.94, using 3 paired years. From 2003 to 2006, the middle-40% wealth share decreased by 1.41 percentage points, while mean economic satisfaction increased by 1.27 scale points.</p>
-<p>Same-year Pearson -0.89; lagged Pearson -0.94. The association retains its direction and is at least as strong with the lag. Only 3 paired years: exploratory.</p>
-<p>Spearman: same-year -1.00; one-year lag -1.00.</p>
-<p><img src="figures/middle_wealth_satisfaction/case_08.png" class="img-fluid"></p>
-</section>
-<section id="france-2003-2007" class="level3">
-<h3 class="anchored" data-anchor-id="france-2003-2007">France: 2003-2007</h3>
-<p>Strongest negative association. 5 valid annual observations from 2003 to 2007.</p>
-<p>Same-year Pearson r = -0.75; one-year-lag Pearson r = -0.77, using 4 paired years. From 2003 to 2007, the middle-40% wealth share increased by 1.00 percentage points, while mean economic satisfaction increased by 0.32 scale points.</p>
-<p>Same-year Pearson -0.75; lagged Pearson -0.77. The association retains its direction and is at least as strong with the lag. Only 4 paired years: exploratory.</p>
-<p>Spearman: same-year -0.80; one-year lag -0.80.</p>
 <p><img src="figures/middle_wealth_satisfaction/case_09.png" class="img-fluid"></p>
 </section>
 </section>

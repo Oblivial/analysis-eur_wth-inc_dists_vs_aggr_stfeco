@@ -14,6 +14,18 @@ middle_wealth_settings <- list(
   )
 )
 
+sort_middle_wealth_cases_by_regime <- function(
+    cases, typology = read.csv(
+      project_path(paths$esping_typology_csv),
+      stringsAsFactors = FALSE
+    )) {
+  cases <- attach_welfare_regimes(cases, typology)
+  cases[order(
+    match(cases$welfare_regime, welfare_regime_levels),
+    cases$country, cases$period_start, cases$period_end
+  ), , drop = FALSE]
+}
+
 # Restrict country cases to finite, reliable, non-extrapolated matched observations.
 middle_wealth_panel <- function(panel) {
   keep <- panel$ess_reliable %in% TRUE & panel$wealth_extrapolated %in% FALSE &
@@ -107,7 +119,7 @@ select_middle_wealth_cases <- function(screening, settings = middle_wealth_setti
 }
 
 # Build annual wealth-share and satisfaction observations from the valid matched sample.
-annual_middle_wealth_panel <- function(valid_matching) {
+annual_middle_wealth_panel <- function(valid_matching, cws = read_cws_cpi2()) {
   rows <- lapply(valid_matching$matches, function(match) {
     ess <- valid_matching$ess[
       valid_matching$ess$country == match$country, , drop = FALSE
@@ -120,11 +132,14 @@ annual_middle_wealth_panel <- function(valid_matching) {
     years <- years[usable]
     shares <- shares[usable]
     ess <- ess[match(years, ess$year), , drop = FALSE]
+    country_cpi2 <- cws[cws$country == match$country, c("year", "cpi2"), drop = FALSE]
+    cpi2 <- country_cpi2$cpi2[match(years, country_cpi2$year)]
     data.frame(
       country = match$country,
       year = years,
       ess_mean = ess$mean,
-      wealth_middle_40_share = vapply(shares, function(value) sum(value[6:9]), numeric(1))
+      wealth_middle_40_share = vapply(shares, function(value) sum(value[6:9]), numeric(1)),
+      cpi2 = cpi2
     )
   })
   bind_rows(rows)
@@ -244,6 +259,7 @@ add_middle_wealth_period_changes <- function(cases, panel) {
   if (!nrow(cases)) return(cases)
   cases$wealth_share_change_pp <- NA_real_
   cases$satisfaction_change_points <- NA_real_
+  cases$cpi2_change <- NA_real_
   for (index in seq_len(nrow(cases))) {
     data <- panel[panel$country == cases$country[[index]], , drop = FALSE]
     start <- data[data$year == cases$period_start[[index]], , drop = FALSE]
@@ -253,6 +269,9 @@ add_middle_wealth_period_changes <- function(cases, panel) {
       end$wealth_middle_40_share - start$wealth_middle_40_share
     )
     cases$satisfaction_change_points[[index]] <- end$ess_mean - start$ess_mean
+    if ("cpi2" %in% names(panel) && is.finite(start$cpi2) && is.finite(end$cpi2)) {
+      cases$cpi2_change[[index]] <- end$cpi2 - start$cpi2
+    }
   }
   direction <- function(change) {
     if (change > 0) return("increased")
@@ -265,7 +284,7 @@ add_middle_wealth_period_changes <- function(cases, panel) {
     if (!is.finite(wealth_change) || !is.finite(satisfaction_change)) {
       return("Requested interval endpoints are not both available in the valid sample.")
     }
-    sprintf(
+    interpretation <- sprintf(
       paste(
         "From %d to %d, the middle-40%% wealth share %s by %.2f percentage points,",
         "while mean economic satisfaction %s by %.2f scale points."
@@ -274,8 +293,54 @@ add_middle_wealth_period_changes <- function(cases, panel) {
       direction(wealth_change), abs(wealth_change),
       direction(satisfaction_change), abs(satisfaction_change)
     )
+    cpi2_change <- cases$cpi2_change[[index]]
+    if (is.finite(cpi2_change)) {
+      interpretation <- paste0(
+        interpretation,
+        sprintf(" CWS CPI2 changed by %.2f index points.", cpi2_change)
+      )
+    }
+    interpretation
   }, character(1))
   cases
+}
+
+# Compare selected cases' endpoint changes in CPI2 and ESS mean satisfaction.
+plot_cpi2_satisfaction_changes <- function(cases, relative_file) {
+  data <- cases[
+    is.finite(cases$cpi2_change) & is.finite(cases$satisfaction_change_points), ,
+    drop = FALSE
+  ]
+  if (!nrow(data)) return(FALSE)
+  x <- data$cpi2_change
+  y <- data$satisfaction_change_points
+  x_limits <- range(x)
+  y_limits <- range(y)
+  x_padding <- max(diff(x_limits) * 0.25, 0.5)
+  y_padding <- max(diff(y_limits) * 0.15, 0.3)
+  x_limits <- x_limits + c(-x_padding, x_padding)
+  y_limits <- y_limits + c(-y_padding, y_padding)
+
+  with_png(relative_file, 1200, 900, function() {
+    graphics::par(mar = c(5, 5, 4, 2))
+    graphics::plot(
+      x, y, xlim = x_limits, ylim = y_limits, pch = 21,
+      bg = plot_colors[["teal"]], col = plot_colors[["teal"]],
+      xlab = "CWS CPI2 change (index points)",
+      ylab = "ESS economic satisfaction mean change (scale points)",
+      main = sprintf("ESS satisfaction change and CWS CPI2 change (n = %d)", nrow(data))
+    )
+    graphics::abline(h = 0, v = 0, col = plot_colors[["grey"]], lty = 3)
+    graphics::text(
+      x, y, labels = paste0(
+        data$country, " ", data$period_start, "-", data$period_end
+      ),
+      pos = 3, cex = 0.75
+    )
+    if (length(unique(x)) > 1L && length(unique(y)) > 1L) {
+      graphics::abline(stats::lm(y ~ x), col = plot_colors[["red"]], lwd = 2)
+    }
+  })
 }
 
 # Plot signed country correlations and coverage for cases meeting the minimum sample rules.
@@ -377,8 +442,13 @@ compute_middle_wealth_satisfaction <- function(
   cases <- add_middle_wealth_period_changes(
     select_ranked_wealth_periods(screening, settings), annual
   )
+  cases <- sort_middle_wealth_cases_by_regime(cases)
   plot_files <- character()
   if (nrow(cases)) {
+    cpi2_file <- file.path(paths$middle_wealth_figures, "cpi2_mean_change.png")
+    if (plot_cpi2_satisfaction_changes(cases, cpi2_file)) {
+      plot_files[["cpi2_change"]] <- cpi2_file
+    }
     file <- file.path(paths$middle_wealth_figures, "country_screening.png")
     plot_middle_wealth_screening(cases, file, settings)
     plot_files[["screening"]] <- file
@@ -397,7 +467,8 @@ compute_middle_wealth_satisfaction <- function(
 # Cache focused case results with their source data, selection criteria, and upstream dependencies.
 run_middle_wealth_satisfaction <- function(panel, valid_matching) {
   cached_result(
-    "middle_wealth_satisfaction", input_files = raw_input_files(),
+    "middle_wealth_satisfaction",
+    input_files = c(raw_input_files(), project_path(paths$esping_typology_csv)),
     code_files = code_files_for("matching", "validity", "association", "middle_wealth"),
     compute = function() compute_middle_wealth_satisfaction(panel, valid_matching),
     output_files = function(result) c(unname(result$plot_files), unname(result$case_files))

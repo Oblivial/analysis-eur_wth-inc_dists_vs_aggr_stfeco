@@ -1,5 +1,7 @@
 paths <- list(
   ess_csv = "data/raw/ess_aggregated_stfeco.csv",
+  cws_xlsx = "data/raw/cws/CWS-data-2020.xlsx",
+  esping_typology_csv = "data/raw/esping_typology_simple.csv",
   wid_dir = "data/raw/wid_all_data_2002_2024_europe",
   cache_dir = ".cache",
   coverage_figures = "figures/descriptive/coverage",
@@ -15,6 +17,7 @@ core_files <- c(
   "modules/util/io.R",
   "modules/util/cache.R",
   "modules/util/helpers.R",
+  "modules/util/welfare_regimes.R",
   "modules/util/plot_utils.R",
   "modules/pipeline.R"
 )
